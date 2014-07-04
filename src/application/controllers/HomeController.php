@@ -15,8 +15,8 @@ class HomeController extends Controller
         	$data = $this->request->getParams();
         	
         	if(!empty($data['login']) && !empty($data['password'])){
-        		$users = new UserModel();
-        		$result = $users->findByLoginAndPassword($data['login'], $data['password']);
+        		$clientModel = new ClientModel();
+        		$result = $clientModel->findByLoginAndPassword($data['login'], $data['password']);
         		if (FALSE == $result) {
         			$errMessages[] = 'Login & Password not match';
         		} elseif($result['supprimer'] == 1) {

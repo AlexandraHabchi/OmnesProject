@@ -15,9 +15,9 @@ abstract Class Model
     public function __construct(){
         
         if(self::$pdo === null){
-            $dsn = "mysql:host=127.0.0.1;dbname=tchat";
-            $username = "tchat";
-            $passwd = "0000";
+            $dsn = "mysql:host=127.0.0.1;dbname=omnes";
+            $username = "omnes";
+            $passwd = "omnes";
             $options = array();
             
             self::$pdo = new PDO($dsn, $username, $passwd, $options);

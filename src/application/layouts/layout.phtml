@@ -30,6 +30,7 @@
         <div class="container-fluid">
             <div class="container">
 	            <div class="row">
+	            <?php if(isset($this->view->auth) && !empty($this->view->auth)) : ?>
                     <nav class="navbar navbar-default navbar-pink" role="navigation">
 					  <div class="container-fluid">
 					    <!-- Brand and toggle get grouped for better mobile display -->
@@ -54,6 +55,7 @@
 					    </div><!-- /.navbar-collapse -->
 					  </div><!-- /.container-fluid -->
 					</nav>
+				<?php endif; ?>
 	            </div><!-- /.row -->
 	        </div><!-- /.container -->
 	    </div><!-- /.container-fluid -->
