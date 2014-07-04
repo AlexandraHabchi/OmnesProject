@@ -1,6 +1,6 @@
 
 <?php if (FALSE == $this->auth) : ?>
-<div class="col-sm-4 col-sm-offset-4 white">
+<div class="col-sm-4 col-sm-offset-4">
     <h1 class="text-center">Login</h1>
     <?php if (!empty($this->errMessages)) : ?>
     	<ul class="list-group">
@@ -21,9 +21,7 @@
 	       <input name="Submit" id="Submit" type="Submit" class="btn btn-default btn-sm"/>
 	    </form>
 	    <br>
-	    <p>Pas encore inscrit ? <a href="/inscription">Créer un compte</a></p>
 </div>	    
 <?php else : ?>
     <h1>Bienvenue <?= $this->auth['login'] ?></h1>
-    <a href="/logout">Déconnexion</a>
 <?php endif; ?>

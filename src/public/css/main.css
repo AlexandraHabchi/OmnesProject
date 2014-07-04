@@ -1,3 +1,7 @@
 /*
  * Main CSS
  */
+
+.inline {
+	display : inline-block;
+}

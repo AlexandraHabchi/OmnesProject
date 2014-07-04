@@ -5,12 +5,15 @@
  * @author Formateur
  *
  */
-class InscriptionController extends Controller
+class GestionClientController extends Controller
 {
     public function action()
     {
         $errMessages = array();
         $validMessages = array();
+        
+        $clientModel = new ClientModel;
+        $this->view->clients = $clientModel->fetchAll();
         
         if($this->request->getMethod() == 'POST'){
         	$data = $this->request->getParams();
@@ -32,7 +35,7 @@ class InscriptionController extends Controller
         			if(empty($users_result)) {
         				$result = $clientModel->create($data['login'], $data['password'], $data['email'], "Admin");
         			} else {
-        				$result = $clientModel->create($data['login'], $data['password'], $data['email'], "Membre");
+        				$result = $clientModel->create($data['login'], $data['password'], $data['email'], "Client");
         			}
         			
 		        	if (FALSE == $result) {
