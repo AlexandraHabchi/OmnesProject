@@ -1,0 +1,29 @@
+
+<?php if (FALSE == $this->auth) : ?>
+<div class="col-sm-4 col-sm-offset-4 white">
+    <h1 class="text-center">Login</h1>
+    <?php if (!empty($this->errMessages)) : ?>
+    	<ul class="list-group">
+    	<?php foreach ($this->errMessages as $value) : ?>
+			<li class="list-group-item list-group-item-danger"><?= $value ?></li>
+    	<?php endforeach; ?>
+    	</ul>
+	<?php endif; ?>
+	    <form role="form" method="POST" action="">
+	    	<div class="form-group">
+	    		<label for="login">Login : </label>
+	    		<input name="login" id="login" type="text" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['login']?>"<?php endif; ?>/>
+	    	</div>
+	    	<div class="form-group">
+	    		<label for="password">Password : </label>
+	    		<input name="password" id="password" type="password" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['password']?>"<?php endif; ?>/>
+	    	</div>
+	       <input name="Submit" id="Submit" type="Submit" class="btn btn-default btn-sm"/>
+	    </form>
+	    <br>
+	    <p>Pas encore inscrit ? <a href="/inscription">Créer un compte</a></p>
+</div>	    
+<?php else : ?>
+    <h1>Bienvenue <?= $this->auth['login'] ?></h1>
+    <a href="/logout">Déconnexion</a>
+<?php endif; ?>
