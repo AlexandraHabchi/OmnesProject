@@ -78,10 +78,14 @@ class IdentifiantModel extends Model
     			    FROM `identifiant` 
     			    JOIN password
     				  ON password.id_cli = identifiant.id_cli
-    			   WHERE pseudo=:login OR email=:login";
+    			   WHERE (pseudo=:login OR email=:login)
+    				 AND password.hashed = :hashed";
+    	
+    	$pwdModel = new PasswordModel();
     
     	$statement = $this->getDb()->prepare($query);
     	$statement->bindParam(':login', $login);
+    	$statement->bindParam(':hashed', $pwdModel->crypt_password($password));
     	
     	if($statement->execute() == false) {
     		$errorInfo = $statement->errorInfo();
