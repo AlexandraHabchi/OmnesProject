@@ -120,4 +120,36 @@ class ClientModel extends Model
     
     	return $statement->fetch();
     }
+    
+    public function delete($id)
+    {
+    	$query = "UPDATE `client` SET valid = 0 WHERE id=:id";
+    	 
+    	$statement = $this->getDb()->prepare($query);
+    	$statement->bindParam(':id', $id);
+    
+    	if($statement->execute() == false) {
+    		$errorInfo = $statement->errorInfo();
+    		echo $errorInfo[2];
+    		exit;
+    	}
+    	 
+    	return TRUE;
+    }
+    
+    public function activate($id)
+    {
+    	$query = "UPDATE `client` SET valid = 1 WHERE id=:id";
+    
+    	$statement = $this->getDb()->prepare($query);
+    	$statement->bindParam(':id', $id);
+    
+    	if($statement->execute() == false) {
+    		$errorInfo = $statement->errorInfo();
+    		echo $errorInfo[2];
+    		exit;
+    	}
+    
+    	return TRUE;
+    }
 }

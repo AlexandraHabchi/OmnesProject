@@ -21,7 +21,7 @@
 
 class IdentifiantModel extends Model
 {
-    public function find($id)
+    public function find($id) 
     {
     	$query = "SELECT * FROM `identifiant` WHERE id_cli=:id";
     	
@@ -39,7 +39,10 @@ class IdentifiantModel extends Model
     
     public function fetchAll()
     {
-    	$query = "SELECT * FROM `identifiant` WHERE valid=1";
+    	$query = "SELECT * 
+    			    FROM `identifiant`
+    			    JOIN client
+    			      ON client.id = identifiant.id_cli";
     	 
     	$statement = $this->getDb()->prepare($query);
     	if($statement->execute() == false) {
@@ -97,7 +100,7 @@ class IdentifiantModel extends Model
     
     public function delete($id)
     {
-    	$query = "UPDATE `identifiant` SET valid = 0 WHERE id_cli=:id";
+    	$query = "UPDATE `identifiant` SET valid=0 WHERE id_cli=:id";
     	
     	$statement = $this->getDb()->prepare($query);
     	$statement->bindParam(':id', $id);
@@ -108,6 +111,28 @@ class IdentifiantModel extends Model
     		exit;
     	}
     	
-    	return TRUE;
+    	$cliModel = new ClientModel;
+    	$OK = $cliModel->delete($id);
+    	
+    	return $OK;
+    }
+    
+    public function activate($id)
+    {
+    	$query = "UPDATE `identifiant` SET valid=1 WHERE id_cli=:id";
+    	 
+    	$statement = $this->getDb()->prepare($query);
+    	$statement->bindParam(':id', $id);
+    
+    	if($statement->execute() == false) {
+    		$errorInfo = $statement->errorInfo();
+    		echo $errorInfo[2];
+    		exit;
+    	}
+    	 
+    	$cliModel = new ClientModel;
+    	$OK = $cliModel->activate($id);
+    	 
+    	return $OK;
     }
 }

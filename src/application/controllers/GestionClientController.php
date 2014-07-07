@@ -9,64 +9,101 @@ class GestionClientController extends Controller
 {
     public function action()
     {
-        $errMessages = array();
-        $validMessages = array();
-        
         $ideModel = new IdentifiantModel;
-        $this->view->clients = $ideModel->fetchAll();
+        $clients = $ideModel->fetchAll();
+        
+        $this->view->clientsActifs = array();
+        $this->view->clientsInactifs = array();
+        
+        foreach ($clients as $client) {
+        	if($client['valid'] == 1) {
+        		$this->view->clientsActifs[] = $client;
+        	} else {
+        		$this->view->clientsInactifs[] = $client;
+        	}
+        }
         
         if($this->request->getMethod() == 'POST'){
         	$data = $this->request->getParams();
         	
-        	if(empty($data['nom_ccm'])){
-        		$errMessages[] = 'Nom commercial obligatoire';
-        	}
-        	 
-        	if(empty($data['pseudo'])){
-        		$errMessages[] = 'Pseudo obligatoire';
-        	}
-        	 
-        	if(empty($data['email']) || !Email::isEmail($data['email'])){
-        		$errMessages[] = 'Email valide obligatoire';
+        	/* Création */
+        	if(isset($data['create'])) {
+        		$this->create($data);
         	}
         	
-        	if(empty($errMessages)) {
-        		$clientModel = new ClientModel();
-        		if($clientModel->findByPseudo($data['pseudo'])) {
-        			$errMessages[] = 'Cet identifiant existe déjà, choisissez-en un autre !';
+        	/* Suppression */
+        	if(isset($data['supp'])) {
+        		$reponse = $ideModel->delete($data['id']);
+        		if (FALSE == $reponse) {
+        			$errMessages[] = 'Problème d\'envoi du message';
+        		} else {
+        			Url::redirect("/gestionClient");
         		}
-        		if($clientModel->findByEmail($data['email'])) {
-        			$errMessages[] = 'Cet e-mail est déjà utilisé !';
-        		}
-        		if(empty($errMessages)) {
-        			$users_result = $clientModel->fetchAll();
-        			
-        			if(empty($users_result)) {
-        				$result = $clientModel->create($data['pseudo'], $data['email'], $data['nom_ccm'], "Admin");
-        			} else {
-        				$result = $clientModel->create($data['pseudo'], $data['email'], $data['nom_ccm'], "Client");
-        			}
-        			
-		        	if (FALSE == $result) {
-		        		$errMessages[] = 'Problème d\'enregistrement';
-		        	} else {
-		        		$validMessages[] = 'Le compte a bien été créé';
-		        		Url::redirect("/gestionClient");
-		        	}
-        		}
-        		
         	}
         	
-        	
-        	$this->view->errMessages = $errMessages;
-        	$this->view->validMessages = $validMessages;
-        	$this->view->inputs = array(
-        			'nom_ccm' => $data['nom_ccm'],
-        			'pseudo' => $data['pseudo'],
-        			'email' => $data['email']);
-        
+        	/* Réactivation */
+        	if(isset($data['activ'])) {
+        		$reponse = $ideModel->activate($data['id']);
+        		if (FALSE == $reponse) {
+        			$errMessages[] = 'Problème d\'envoi du message';
+        		} else {
+        			Url::redirect("/gestionClient");
+        		}
+        	}
         }
         
         $this->view->auth = $this->request->getSession()->getNamespace('auth');
+    }
+    
+    private function create($data)
+    {
+    	$errMessages = array();
+    	$validMessages = array();
+    	
+    	if(empty($data['nom_ccm'])){
+    		$errMessages[] = 'Nom commercial obligatoire';
+    	}
+    	
+    	if(empty($data['pseudo'])){
+    		$errMessages[] = 'Pseudo obligatoire';
+    	}
+    	
+    	if(empty($data['email']) || !Email::isEmail($data['email'])){
+    		$errMessages[] = 'Email valide obligatoire';
+    	}
+    	 
+    	if(empty($errMessages)) {
+    		$clientModel = new ClientModel();
+    		if($clientModel->findByPseudo($data['pseudo'])) {
+    			$errMessages[] = 'Cet identifiant existe déjà, choisissez-en un autre !';
+    		}
+    		if($clientModel->findByEmail($data['email'])) {
+    			$errMessages[] = 'Cet e-mail est déjà utilisé !';
+    		}
+    		if(empty($errMessages)) {
+    			$users_result = $clientModel->fetchAll();
+    			 
+    			if(empty($users_result)) {
+    				$result = $clientModel->create($data['pseudo'], $data['email'], $data['nom_ccm'], "Admin");
+    			} else {
+    				$result = $clientModel->create($data['pseudo'], $data['email'], $data['nom_ccm'], "Client");
+    			}
+    			 
+    			if (FALSE == $result) {
+    				$errMessages[] = 'Problème d\'enregistrement';
+    			} else {
+    				$validMessages[] = 'Le compte a bien été créé';
+    				Url::redirect("/gestionClient");
+    			}
+    		}
+    	
+    	}
+    	
+    	$this->view->errMessages = $errMessages;
+    	$this->view->validMessages = $validMessages;
+    	$this->view->inputs = array(
+    			'nom_ccm' => $data['nom_ccm'],
+    			'pseudo' => $data['pseudo'],
+    			'email' => $data['email']);
     }
 }
