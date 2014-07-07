@@ -1,0 +1,25 @@
+
+<?php if(isset($this->user_modif) && !empty($this->user_modif)) : ?>
+	<h1>Modifier le profil</h1>
+	<form role="form" action="" method="post" class="form-inline" name="formulaire">
+		<input class="form-control hidden" type="text" name="id" value="<?= $this->user_modif['id_cli']?>" />
+		<input class="form-control" type="text" disabled value="<?= $this->user_modif['id_cli']?>" />
+		<input class="form-control" type="text" disabled value="<?= $this->user_modif['pseudo']?>"/>
+		<select class="form-control" name="profil">
+			<option <?php if($this->user_modif['profil'] == "Client") echo "selected"; ?> value="Client">Client</option>
+			<option <?php if($this->user_modif['profil'] == "Distributeur") echo "selected"; ?> value="Distributeur">Distributeur</option>
+			<option <?php if($this->user_modif['profil'] == "Admin") echo "selected"; ?> value="Admin">Admin</option>
+		</select>
+		<input class="btn btn-default btn-sm" type="submit" value="Valider" name="valider" id="valider"/>
+	</form>
+	<?php if (!empty($this->errMessages)) : ?>
+    	<ul class="list-group">
+    	<?php foreach ($this->errMessages as $value) : ?>
+			<li class="list-group-item list-group-item-danger"><?= $value ?></li>
+    	<?php endforeach; ?>
+    	</ul>
+	<?php endif; ?>
+<?php else : 
+	Url::redirect('/home'); 
+?>
+<?php endif; ?>
