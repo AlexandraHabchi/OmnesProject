@@ -1,6 +1,5 @@
-
 <?php if (FALSE == $this->user) : ?>
-<div class="col-sm-4 col-sm-offset-4">
+<div class="col-sm-4 col-sm-offset-4" id="connexion">
     <h1 class="text-center">Login</h1>
     <?php if (!empty($this->errMessages)) : ?>
     	<ul class="list-group">
@@ -18,8 +17,9 @@
 	    		<label for="password">Password : </label>
 	    		<input name="password" id="password" type="password" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['password']?>"<?php endif; ?>/>
 	    	</div>
-	       <input name="Submit" id="Submit" type="Submit" class="btn btn-default btn-sm"/>
+	       <input name="connect" id="connect" type="Submit" class="btn btn-default btn-sm"/>
 	    </form>
+	    <a href="">Mot de passe oublié ?</a>
 	    <br>
 </div>	    
 <?php else : ?>

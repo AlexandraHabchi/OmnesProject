@@ -46,13 +46,15 @@ class PasswordModel extends Model
     		exit;
     	}
     	$objet = 'Ouverture de votre compte Omnes Pharma';
-    	$msg = '<b>Félicitations !</b><br> Un compte a été créé pour vous sur Omnes Pharma.<br>';
-    	$msg.= 'Vos identifiants : ' . $pseudo . ' ou ' . $email . '<br>';
-    	$msg.= 'Votre mot de passe : ' . $mdp;
+    	$msg = '<b>Felicitations !</b><br>';
+    	$msg.= 'Vous avez maintenant un compte sur Omnes Pharma.<br>';
+    	$msg.= 'Vos identifiants : <b>' . $pseudo . '</b> ou <b>' . $email . '</b><br>';
+    	$msg.= 'Votre mot de passe : <b>' . $mdp . '</b>';
     	
     	$OK = Email::envoi($email, $objet, $msg);
+    	
     	$errors = new ErrorModel;
-    	if($OK != true) {
+    	if($OK != 1) {
     		echo $errors->find('ERR-004'); exit;
     	}
     	return TRUE;

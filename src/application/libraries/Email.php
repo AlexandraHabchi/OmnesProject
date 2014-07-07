@@ -47,10 +47,9 @@ class Email
 	  $entete.= 'MIME-Version: 1.0' . $NL;
 	  $entete.= 'From:"' . self::$nameExp . '"<' . self::$mailExp . '>' . $NL;
 	  
-	  $msgHtml = '<html><head><meta charset = "UTF-8" /></head><body>' . $msg . '</body></html>';
+	  $msgHtml = '<html><body>' . $msg . '</body></html>';
 
 	  $OK = mail ($dest, $objet, $msgHtml, $entete);
-	
 	  return $OK;
 	  
 	}

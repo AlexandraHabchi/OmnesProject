@@ -9,6 +9,7 @@ class GestionClientController extends Controller
 {
     public function action()
     {
+    	$this->view->user = $this->request->getSession()->getNamespace('user');
         $ideModel = new IdentifiantModel;
         $clients = $ideModel->fetchAll();
         
@@ -59,14 +60,14 @@ class GestionClientController extends Controller
         		Url::redirect("/modifierClient");
         	}
         }
-        
-        $this->view->user = $this->request->getSession()->getNamespace('user');
     }
     
     private function create($data)
     {
     	$errMessages = array();
     	$validMessages = array();
+    	$errors = new ErrorModel();
+    	$ideModel = new IdentifiantModel;
     	
     	if(empty($data['nom_ccm'])){
     		$errMessages[] = 'Nom commercial obligatoire';
@@ -88,6 +89,7 @@ class GestionClientController extends Controller
     		if($clientModel->findByEmail($data['email'])) {
     			$errMessages[] = 'Cet e-mail est déjà utilisé !';
     		}
+    		
     		if(empty($errMessages)) {
     			$users_result = $clientModel->fetchAll();
     			 

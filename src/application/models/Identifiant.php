@@ -64,15 +64,16 @@ class IdentifiantModel extends Model
     	$statement->bindParam(':email', $email);
     	$statement->bindParam(':profil', $profil);
     	
-    	$passwordModel = new PasswordModel();
-    	$OK = $passwordModel->create($id_cli, $pseudo, $email);
-    	
-    	if($statement->execute() == false || $OK != true) {
+    	if($statement->execute() == false) {
     		$errorInfo = $statement->errorInfo();
     		echo $errorInfo[2];
     		exit;
     	}
-    	return TRUE;
+
+    	$passwordModel = new PasswordModel();
+    	$OK = $passwordModel->create($id_cli, $pseudo, $email);
+    	 
+    	return $OK;
     }
     
     public function findByLoginAndPassword($login, $password)
