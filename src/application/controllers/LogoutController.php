@@ -9,7 +9,6 @@ class LogoutController extends Controller
 {
     public function action()
     {
-        $this->request->getSession()->unsetNamespace('auth');
-        setcookie('id_dest');
+        $this->request->getSession()->unsetNamespace('user');
     }
 }

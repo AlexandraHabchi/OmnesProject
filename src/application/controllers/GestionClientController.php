@@ -56,7 +56,7 @@ class GestionClientController extends Controller
         	/* Modification */
         	if(isset($data['modif']) && isset($data['id'])) {
         		$this->request->getSession()->setNamespace('id_modif', $data['id']);
-        		Url::redirect("/modifierUser");
+        		Url::redirect("/modifierClient");
         	}
         }
         

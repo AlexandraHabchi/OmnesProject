@@ -5,7 +5,7 @@
  * @author Formateur
  *
  */
-class ModifierUserController extends Controller
+class ModifierClientController extends Controller
 {
     public function action()
     {

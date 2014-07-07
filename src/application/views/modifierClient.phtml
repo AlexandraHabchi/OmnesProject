@@ -1,4 +1,4 @@
-
+<?php if(empty($this->user)) Url::redirect("/home"); ?>
 <?php if(isset($this->user_modif) && !empty($this->user_modif)) : ?>
 	<h1>Modifier le profil</h1>
 	<form role="form" action="" method="post" class="form-inline" name="formulaire">
