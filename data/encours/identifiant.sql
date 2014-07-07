@@ -27,13 +27,13 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `identifiant` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Code d''identification',
-  `id_cli` int(11) NOT NULL COMMENT 'Code client',
+ `id_cli` int(11) NOT NULL COMMENT 'Code client',
   `pseudo` varchar(45) NOT NULL COMMENT 'Pseudo utilisateur',
   `email` varchar(45) NOT NULL COMMENT 'Adresse mail client',
   `valid` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Blocage du compte',
+  `profil` varchar(45) NOT NULL COMMENT 'Profil du compte',
   `session` varchar(10) DEFAULT NULL COMMENT 'Numero de la derniere session',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id_cli`),
   UNIQUE KEY `pseudo` (`pseudo`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Liste des Identifiants' AUTO_INCREMENT=3 ;

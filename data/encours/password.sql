@@ -27,14 +27,15 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `password` (
-  `id_ide` int(11) NOT NULL COMMENT 'Code d''identification',
+  `id_cli` int(11) NOT NULL COMMENT 'Code d''identification',
   `hashed` varchar(250) NOT NULL COMMENT 'Mot de passe',
-  `change` tinyint(1) DEFAULT NULL COMMENT 'Changement obligatoire de mot de passe',
+  `clear` varchar(250) NOT NULL COMMENT 'Mot de passe',
+  `change` tinyint(1) DEFAULT '1' COMMENT 'Changement obligatoire de mot de passe',
   `nbr_cnx` int(11) DEFAULT NULL COMMENT 'Nombre de connexions avec le meme mot de passe',
   `last_chg` date DEFAULT NULL COMMENT 'Date du dernier changement de mot de passe',
   `nbr_oub` int(11) DEFAULT NULL COMMENT 'Nombre de demandes pour oubli de mot de passe',
-  UNIQUE KEY `ide_cod_UNIQUE` (`id_ide`),
-  KEY `ide_cod` (`id_ide`)
+  UNIQUE KEY `id_cli_UNIQUE` (`id_cli`),
+  KEY `id_cli` (`id_cli`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Liste des mots de passe et stats';
 
 --

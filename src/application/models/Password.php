@@ -3,9 +3,15 @@
 /**
  * Gestion table `password`
  *
- * `id` int(11) NOT NULL AUTO_INCREMENT,
- * `login` varchar(254) NOT NULL,
- * `password` varchar(26) NOT NULL
+  `id_cli` int(11) NOT NULL COMMENT 'Code d''identification',
+  `hashed` varchar(250) NOT NULL COMMENT 'Mot de passe',
+  `clear` varchar(250) NOT NULL COMMENT 'Mot de passe',
+  `change` tinyint(1) DEFAULT '1' COMMENT 'Changement obligatoire de mot de passe',
+  `nbr_cnx` int(11) DEFAULT NULL COMMENT 'Nombre de connexions avec le meme mot de passe',
+  `last_chg` date DEFAULT NULL COMMENT 'Date du dernier changement de mot de passe',
+  `nbr_oub` int(11) DEFAULT NULL COMMENT 'Nombre de demandes pour oubli de mot de passe',
+  UNIQUE KEY `id_cli_UNIQUE` (`id_cli`),
+  KEY `id_cli` (`id_cli`)
  *
  * @author Alexandra
  * @category Models
@@ -24,45 +30,43 @@ class PasswordModel extends Model
     	
     }
     
-    public function create($login, $password)
+    public function create($id_cli, $pseudo, $email)
     {
-    	$query = "INSERT INTO password VALUES (NULL, :login, :password)";
-    	 
+    	$query = "INSERT INTO password VALUES (:id_cli, :password, :clear, 1, NULL, NULL, NULL)";
+    	
+    	$mdp = $this->generate(6);
     	$statement = $this->getDb()->prepare($query);
-    	$statement->bindParam(':login', $login);
-    	$statement->bindParam(':password', $this->crypt_password($password));
+    	$statement->bindParam(':id_cli', $id_cli);
+    	$statement->bindParam(':password', $this->crypt_password($mdp));
+    	$statement->bindParam(':clear', $mdp);
     	
     	if($statement->execute() == false) {
     		$errorInfo = $statement->errorInfo();
     		echo $errorInfo[2];
     		exit;
+    	}
+    	$objet = 'Ouverture de votre compte Omnes Pharma';
+    	$msg = '<b>Félicitations !</b><br> Un compte a été créé pour vous sur Omnes Pharma.<br>';
+    	$msg.= 'Vos identifiants : ' . $pseudo . ' ou ' . $email . '<br>';
+    	$msg.= 'Votre mot de passe : ' . $mdp;
+    	
+    	$OK = Email::envoi($email, $objet, $msg);
+    	if($OK != true) {
+    		echo 'Erreur d\'envoi du mail'; exit;
     	}
     	return TRUE;
     }
     
-    public function findByLogin($login)
+    public function update($id_cli, $password)
     {
-    	$query = "SELECT * FROM `password` WHERE login=:login";
-    
-    	$statement = $this->getDb()->prepare($query);
-    	$statement->bindParam(':login', $login);
-    	
-    	if($statement->execute() == false) {
-    		$errorInfo = $statement->errorInfo();
-    		echo $errorInfo[2];
-    		exit;
-    	}
-    	
-    	return $statement->fetch();
-    }
-    
-    public function update($login, $password)
-    {
-    	$query = "UPDATE `password` SET password=:password WHERE login=:login";
+    	$query = "UPDATE `password` 
+    				 SET hashed=:password, clear=:clear last_chg=:last_chg, nbr_cnx=0, change=0
+    			   WHERE id_cli=:id_cli";
     	
     	$statement = $this->getDb()->prepare($query);
-		$statement->bindParam(':login', $login);
-		$statement->bindParam(':password', $password);
+		$statement->bindParam(':id_cli', $id_cli);
+		$statement->bindParam(':password', $this->crypt_password($password));
+		$statement->bindParam(':clear', $password);
     	
     	if($statement->execute() == false) {
     		$errorInfo = $statement->errorInfo();
@@ -70,22 +74,6 @@ class PasswordModel extends Model
     		exit;
     	}
     	 
-    	return TRUE;
-    }
-    
-    public function delete($id) 
-    {
-    	$query = "DELETE FROM `password` WHERE id=:id";
-    	
-    	$statement = $this->getDb()->prepare($query);
-    	$statement->bindParam(':id', $id);
-    	 
-    	if($statement->execute() == false) {
-    		$errorInfo = $statement->errorInfo();
-    		echo $errorInfo[2];
-    		exit;
-    	}
-    	
     	return TRUE;
     }
     
@@ -98,4 +86,21 @@ class PasswordModel extends Model
     	
     	return $crypt_end;
     }
+    
+    /**
+     * Fonction de generation d'un mot de passe Aleatoire
+     * @param int $len longueur du mot de passe
+     * @return string $mdp mot de passe alphanumérique
+     */
+	function generate($len)
+	{
+	  $mdp='';
+	  while ( $len > 0 )
+	    {
+	      $X = rand(48,122);
+	      if (($X>=48 && $X<=57) || ($X>=65 && $X<=90) ||($X>=97 && $X<=122))   // [0..9, A..Z, a..z]
+	        {  $mdp.=chr($X); $len--; }
+	    }
+	  return $mdp;
+	}
 }

@@ -20,8 +20,10 @@ require_once LIBRARY_PATH . DS . 'Layout.php';
 require_once LIBRARY_PATH . DS . 'Model.php';
 require_once LIBRARY_PATH . DS . 'Url.php';
 require_once LIBRARY_PATH . DS . 'Date.php';
+require_once LIBRARY_PATH . DS . 'Email.php';
 require_once MODEL_PATH . DS . 'Client.php';
 require_once MODEL_PATH . DS . 'Password.php';
+require_once MODEL_PATH . DS . 'Identifiant.php';
 
 $request = new Request;
 $response = new Response;

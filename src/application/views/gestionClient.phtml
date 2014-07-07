@@ -1,21 +1,17 @@
 <div class="col-sm-3">
 	<h3 class="text-center">Créer un compte</h3>
 	<form method="POST" action="">
+		<div class="form-group">
+    		<label for="nom_ccm">Nom commercial : </label>
+    		<input name="nom_ccm" id="nom_ccm" type="text" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['nom_ccm']?>"<?php endif; ?>/>
+    	</div>
 	    <div class="form-group">
-    		<label for="login">Login : </label>
-    		<input name="login" id="login" type="text" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['login']?>"<?php endif; ?>/>
+    		<label for="pseudo">Pseudo : </label>
+    		<input name="pseudo" id="pseudo" type="text" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['pseudo']?>"<?php endif; ?>/>
     	</div>
     	<div class="form-group">
     		<label for="email">Adresse mail : </label>
     		<input name="email" id="email" type="text" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['email']?>"<?php endif; ?>/>
-    	</div>
-    	<div class="form-group">
-    		<label for="password">Password : </label>
-    		<input name="password" id="password" type="password" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['password']?>"<?php endif; ?>/>
-    	</div>
-    	<div class="form-group">
-    		<label for="confirm_pass">Confirm password : </label>
-    		<input name="confirm_pass" id="confirm_pass" type="password" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['confirm_pass']?>"<?php endif; ?>/>
     	</div>
        <input name="Submit" id="Submit" type="Submit" class="btn btn-default btn-sm"/>
 	</form>
@@ -44,17 +40,17 @@
 		</thead>
 		<?php foreach($this->clients as $client) : ?>
 		<tr>
-			<td><?= $client['login'] ?></td>
+			<td><?= $client['pseudo'] ?></td>
 			<td><?= $client['email'] ?></td>
 			<td><?= $client['profil'] ?></td>
 			<td>
 				<form action="" method="post" class="inline">
-					<input class="hidden" type="text" name="id" value="<?= $client['id'] ?>"/>
+					<input class="hidden" type="text" name="id" value="<?= $client['id_cli'] ?>"/>
 					<input class="btn btn-default btn-sm" type="submit" value="Modifier" name="modif" />
 				</form>
 				<?php if($client['profil'] != "Admin") :  ?>
 				<form action="" method="post" class="inline">
-					<input class="hidden" type="text" name="id" value="<?= $client['id'] ?>"/>
+					<input class="hidden" type="text" name="id" value="<?= $client['id_cli'] ?>"/>
 					<input class="btn btn-danger btn-sm supp" type="button" value="Supprimer" />
 					<input class="hidden" disabled="disabled" type="submit" value="Supprimer" name="supp" id="supp" />
 				</form>

@@ -15,11 +15,12 @@ class HomeController extends Controller
         	$data = $this->request->getParams();
         	
         	if(!empty($data['login']) && !empty($data['password'])){
-        		$clientModel = new ClientModel();
-        		$result = $clientModel->findByLoginAndPassword($data['login'], $data['password']);
+        		$ideModel = new IdentifiantModel();
+        		$result = $ideModel->findByLoginAndPassword($data['login'], $data['password']);
         		if (FALSE == $result) {
         			$errMessages[] = 'Login & Password not match';
-        		} elseif($result['supprimer'] == 1) {
+        		} elseif($result['valid'] == 0) {
+        			print_r($result); exit;
         			$errMessages[] = 'Ce compte a été supprimé';
         		} else {
         			$this->request->getSession()->setNamespace('auth', $result);
