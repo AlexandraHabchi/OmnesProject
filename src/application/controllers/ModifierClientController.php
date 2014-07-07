@@ -25,7 +25,7 @@ class ModifierClientController extends Controller
         		$result = $ideModel->updateByAdmin($data['profil'], $data['id']);
         		
         		if (FALSE == $result) {
-        			$errMessages[] = $errors->find($id);
+        			$errMessages[] = $errors->find('ERR-005');
         		} else {
         			Url::redirect("/gestionClient");
         		}
