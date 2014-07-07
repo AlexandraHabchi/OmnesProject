@@ -37,11 +37,13 @@ CREATE TABLE IF NOT EXISTS `message` (
 --
 
 INSERT INTO `message` (`id`, `lib`) VALUES
-('ERR-001', 'Identifiant inconnu'),
+('ERR-001', 'Identifiant ou mot de passe incorrects'),
 ('ERR-002', 'Mot de passe Incorrect'),
 ('ERR-003', 'Compte bloqué, contactez votre administrateur'),
 ('ERR-004', 'Erreur d''envoi du message'),
-('MSG-001', 'Mot de passe envoyé à votre adresse mail');
+('ERR-005', 'Problème d''enregistrement des données'),
+('MSG-001', 'Mot de passe envoyé à votre adresse mail'),
+('MSG-002', 'Le compte a bien été créé');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

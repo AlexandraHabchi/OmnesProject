@@ -98,6 +98,23 @@ class IdentifiantModel extends Model
     	return $statement->fetch();
     }
     
+    public function updateByAdmin($profil, $id) 
+    {
+    	$query = "UPDATE `identifiant` SET profil=:profil WHERE id_cli=:id";
+    	 
+    	$statement = $this->getDb()->prepare($query);
+    	$statement->bindParam(':id', $id);
+    	$statement->bindParam(':profil', $profil);
+    	
+    	if($statement->execute() == false) {
+    		$errorInfo = $statement->errorInfo();
+    		echo $errorInfo[2];
+    		exit;
+    	}
+    	 
+    	return TRUE;
+    }
+    
     public function delete($id)
     {
     	$query = "UPDATE `identifiant` SET valid=0 WHERE id_cli=:id";

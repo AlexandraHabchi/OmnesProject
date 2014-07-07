@@ -51,8 +51,9 @@ class PasswordModel extends Model
     	$msg.= 'Votre mot de passe : ' . $mdp;
     	
     	$OK = Email::envoi($email, $objet, $msg);
+    	$errors = new ErrorModel;
     	if($OK != true) {
-    		echo 'Erreur d\'envoi du mail'; exit;
+    		echo $errors->find('ERR-004'); exit;
     	}
     	return TRUE;
     }

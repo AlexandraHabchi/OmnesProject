@@ -23,6 +23,8 @@ class GestionClientController extends Controller
         	}
         }
         
+        $errors = new ErrorModel();
+        
         if($this->request->getMethod() == 'POST'){
         	$data = $this->request->getParams();
         	
@@ -35,7 +37,7 @@ class GestionClientController extends Controller
         	if(isset($data['supp'])) {
         		$reponse = $ideModel->delete($data['id']);
         		if (FALSE == $reponse) {
-        			$errMessages[] = 'Problème d\'envoi du message';
+        			$errMessages[] = $errors->find('ERR-005');;
         		} else {
         			Url::redirect("/gestionClient");
         		}
@@ -45,14 +47,20 @@ class GestionClientController extends Controller
         	if(isset($data['activ'])) {
         		$reponse = $ideModel->activate($data['id']);
         		if (FALSE == $reponse) {
-        			$errMessages[] = 'Problème d\'envoi du message';
+        			$errMessages[] = $errors->find('ERR-005');;
         		} else {
         			Url::redirect("/gestionClient");
         		}
         	}
+        	
+        	/* Modification */
+        	if(isset($data['modif']) && isset($data['id'])) {
+        		$this->request->getSession()->setNamespace('id_modif', $data['id']);
+        		Url::redirect("/modifierUser");
+        	}
         }
         
-        $this->view->auth = $this->request->getSession()->getNamespace('auth');
+        $this->view->user = $this->request->getSession()->getNamespace('user');
     }
     
     private function create($data)
@@ -90,9 +98,9 @@ class GestionClientController extends Controller
     			}
     			 
     			if (FALSE == $result) {
-    				$errMessages[] = 'Problème d\'enregistrement';
+    				$errMessages[] = $errors->find('ERR-005');
     			} else {
-    				$validMessages[] = 'Le compte a bien été créé';
+    				$validMessages[] = $errors->find('MSG-002');
     				Url::redirect("/gestionClient");
     			}
     		}

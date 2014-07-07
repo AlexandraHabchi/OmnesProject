@@ -1,5 +1,5 @@
 
-<?php if (FALSE == $this->auth) : ?>
+<?php if (FALSE == $this->user) : ?>
 <div class="col-sm-4 col-sm-offset-4">
     <h1 class="text-center">Login</h1>
     <?php if (!empty($this->errMessages)) : ?>
@@ -23,5 +23,5 @@
 	    <br>
 </div>	    
 <?php else : ?>
-    <h1>Bienvenue <?= $this->auth['pseudo'] ?></h1>
+    <h1>Bienvenue <?= $this->user['pseudo'] ?></h1>
 <?php endif; ?>

@@ -121,6 +121,24 @@ class ClientModel extends Model
     	return $statement->fetch();
     }
     
+    public function updateLastConnect($id)
+    {
+    	$query = "UPDATE `client` SET dat_last_connect = :date WHERE id=:id";
+    	
+    	$date = Date::getDate();
+    	$statement = $this->getDb()->prepare($query);
+    	$statement->bindParam(':id', $id);
+    	$statement->bindParam(':date', $date);
+    
+    	if($statement->execute() == false) {
+    		$errorInfo = $statement->errorInfo();
+    		echo $errorInfo[2];
+    		exit;
+    	}
+    
+    	return TRUE;
+    }
+    
     public function delete($id)
     {
     	$query = "UPDATE `client` SET valid = 0 WHERE id=:id";

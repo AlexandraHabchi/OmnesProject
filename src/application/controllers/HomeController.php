@@ -10,6 +10,7 @@ class HomeController extends Controller
     public function action()
     {
         $errMessages = array();
+        $errors = new ErrorModel();
         
         if($this->request->getMethod() == 'POST'){
         	$data = $this->request->getParams();
@@ -18,12 +19,14 @@ class HomeController extends Controller
         		$ideModel = new IdentifiantModel();
         		$result = $ideModel->findByLoginAndPassword($data['login'], $data['password']);
         		if (FALSE == $result) {
-        			$errMessages[] = 'Login & Password not match';
+        			$errMessages[] = $errors->find('ERR-001');
         		} elseif($result['valid'] == 0) {
         			print_r($result); exit;
-        			$errMessages[] = 'Ce compte a été supprimé';
+        			$errMessages[] = $errors->find('ERR-003');
         		} else {
-        			$this->request->getSession()->setNamespace('auth', $result);
+        			$this->request->getSession()->setNamespace('user', $result);
+        			$newClient = new ClientModel;
+        			$newClient->updateLastConnect($result['id_cli']);
         		}
         	}
         	
@@ -42,6 +45,6 @@ class HomeController extends Controller
         
         }
         
-        $this->view->auth = $this->request->getSession()->getNamespace('auth');
+        $this->view->user = $this->request->getSession()->getNamespace('user');
     }
 }
