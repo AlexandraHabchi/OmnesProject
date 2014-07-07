@@ -23,22 +23,25 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `famille`
+-- Structure de la table `message`
 --
 
-CREATE TABLE IF NOT EXISTS `famille` (
-  `cod_fam` varchar(5) NOT NULL,
-  `lib_fam` varchar(45) NOT NULL COMMENT 'Libellé',
-  PRIMARY KEY (`cod_fam`)
+CREATE TABLE IF NOT EXISTS `message` (
+  `id` varchar(12) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `lib` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Contenu de la table `famille`
+-- Contenu de la table `message`
 --
 
-INSERT INTO `famille` (`cod_fam`, `lib_fam`) VALUES
-('1', 'Famille 3'),
-('5', 'Famille 2');
+INSERT INTO `message` (`id`, `lib`) VALUES
+('ERR-001', 'Identifiant inconnu'),
+('ERR-002', 'Mot de passe Incorrect'),
+('ERR-003', 'Compte bloqué, contactez votre administrateur'),
+('ERR-004', 'Erreur d''envoi du message'),
+('MSG-001', 'Mot de passe envoyé à votre adresse mail');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

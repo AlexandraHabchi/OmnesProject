@@ -23,22 +23,22 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `famille`
+-- Structure de la table `adresse`
 --
 
-CREATE TABLE IF NOT EXISTS `famille` (
-  `cod_fam` varchar(5) NOT NULL,
-  `lib_fam` varchar(45) NOT NULL COMMENT 'Libellé',
-  PRIMARY KEY (`cod_fam`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `adresse` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Code adresse, clé primaire',
+  `id_cli` int(11) NOT NULL COMMENT 'Code client, index',
+  `nom_rue` varchar(45) NOT NULL COMMENT 'Nom de la rue',
+  `cpl_rue` varchar(45) DEFAULT NULL COMMENT 'Complement d''adresse',
+  `cod_pos` varchar(5) NOT NULL COMMENT 'Code postal',
+  `ville` varchar(45) NOT NULL COMMENT 'Ville',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Liste des adresses des clients, fournisseurs, labos, ...' AUTO_INCREMENT=11 ;
 
 --
--- Contenu de la table `famille`
+-- Contenu de la table `adresse`
 --
-
-INSERT INTO `famille` (`cod_fam`, `lib_fam`) VALUES
-('1', 'Famille 3'),
-('5', 'Famille 2');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

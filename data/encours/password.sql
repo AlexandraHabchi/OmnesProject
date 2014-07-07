@@ -23,22 +23,23 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `famille`
+-- Structure de la table `motdepasse`
 --
 
-CREATE TABLE IF NOT EXISTS `famille` (
-  `cod_fam` varchar(5) NOT NULL,
-  `lib_fam` varchar(45) NOT NULL COMMENT 'Libellé',
-  PRIMARY KEY (`cod_fam`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `password` (
+  `id_ide` int(11) NOT NULL COMMENT 'Code d''identification',
+  `hashed` varchar(250) NOT NULL COMMENT 'Mot de passe',
+  `change` tinyint(1) DEFAULT NULL COMMENT 'Changement obligatoire de mot de passe',
+  `nbr_cnx` int(11) DEFAULT NULL COMMENT 'Nombre de connexions avec le meme mot de passe',
+  `last_chg` date DEFAULT NULL COMMENT 'Date du dernier changement de mot de passe',
+  `nbr_oub` int(11) DEFAULT NULL COMMENT 'Nombre de demandes pour oubli de mot de passe',
+  UNIQUE KEY `ide_cod_UNIQUE` (`id_ide`),
+  KEY `ide_cod` (`id_ide`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Liste des mots de passe et stats';
 
 --
--- Contenu de la table `famille`
+-- Contenu de la table `motdepasse`
 --
-
-INSERT INTO `famille` (`cod_fam`, `lib_fam`) VALUES
-('1', 'Famille 3'),
-('5', 'Famille 2');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

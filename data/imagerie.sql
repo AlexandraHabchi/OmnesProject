@@ -23,22 +23,14 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `famille`
+-- Structure de la table `imagerie`
 --
 
-CREATE TABLE IF NOT EXISTS `famille` (
-  `cod_fam` varchar(5) NOT NULL,
-  `lib_fam` varchar(45) NOT NULL COMMENT 'Libellé',
-  PRIMARY KEY (`cod_fam`)
+CREATE TABLE IF NOT EXISTS `imagerie` (
+  `cod_prd` int(11) NOT NULL COMMENT 'Code produit',
+  `lnk_prd` varchar(125) DEFAULT NULL COMMENT 'Lien externe',
+  UNIQUE KEY `image_produit` (`cod_prd`,`lnk_prd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Contenu de la table `famille`
---
-
-INSERT INTO `famille` (`cod_fam`, `lib_fam`) VALUES
-('1', 'Famille 3'),
-('5', 'Famille 2');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

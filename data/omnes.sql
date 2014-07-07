@@ -127,35 +127,32 @@ INSERT INTO `appli` (`cod_app`, `niv_app`, `nom_btn`, `ord_aff_app`, `url_cnx`, 
 --
 
 CREATE TABLE IF NOT EXISTS `client` (
-  `cod_cli` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `pseudo` varchar(45) NOT NULL COMMENT 'Pseudo de connexion',
-  `bal_cli` varchar(45) NOT NULL COMMENT 'Adresse mail principale',
+  `email` varchar(45) NOT NULL COMMENT 'Adresse mail principale',
   `nom_ccm` varchar(45) NOT NULL COMMENT 'Nom commercial de l''entreprise',
   `nom_cli` varchar(40) DEFAULT NULL COMMENT 'Nom du(des) contact(s) ou responsable(s)',
   `com_cli` varchar(250) DEFAULT NULL COMMENT 'Commentaire',
-  `sir_cli` varchar(25) DEFAULT NULL COMMENT 'Numero de siret + code etablissement',
-  `cod_tva` varchar(25) DEFAULT NULL COMMENT 'code tva intra-communautaire',
-  `tel_cli` varchar(15) DEFAULT NULL COMMENT 'Numero de téléphone fixe',
-  `gsm_cli` varchar(15) DEFAULT NULL COMMENT 'Numero de telephone mobile',
-  `fax_cli` varchar(15) DEFAULT NULL COMMENT 'Numero de fax',
-  `bal_sec_cli` varchar(45) DEFAULT NULL COMMENT 'Adresse mail secondaire',
-  `dat_cre_cli` date NOT NULL COMMENT 'Date de creation du client',
-  `dat_sup_cli` date DEFAULT NULL COMMENT 'Date de suppression',
-  `act_cli` varchar(1) NOT NULL DEFAULT 'O' COMMENT 'En activité (par default = O, suppression logique = N)',
-  `dat_con_cli` date DEFAULT NULL COMMENT 'Date de la derniere connexion',
-  `session_cli` varchar(10) DEFAULT NULL COMMENT 'Numero de session du client',
-  PRIMARY KEY (`cod_cli`),
+  `siret` varchar(25) DEFAULT NULL COMMENT 'Numero de siret + code etablissement',
+  `tva` varchar(25) DEFAULT NULL COMMENT 'code tva intra-communautaire',
+  `tel` varchar(15) DEFAULT NULL COMMENT 'Numero de téléphone fixe',
+  `gsm` varchar(15) DEFAULT NULL COMMENT 'Numero de telephone mobile',
+  `fax` varchar(15) DEFAULT NULL COMMENT 'Numero de fax',
+  `email_sec` varchar(45) DEFAULT NULL COMMENT 'Adresse mail secondaire',
+  `dat_crea` date NOT NULL COMMENT 'Date de creation du client',
+  `dat_supp` date DEFAULT NULL COMMENT 'Date de suppression',
+  `valid` varchar(1) NOT NULL DEFAULT 'O' COMMENT 'En activité (par default = O, suppression logique = N)',
+  `dat_last_connect` date DEFAULT NULL COMMENT 'Date de la derniere connexion',
+  `session` varchar(10) DEFAULT NULL COMMENT 'Numero de session du client',
+  PRIMARY KEY (`id`),
   UNIQUE KEY `pseudo` (`pseudo`),
-  UNIQUE KEY `bal_cli` (`bal_cli`)
+  UNIQUE KEY `bal_cli` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Contenu de la table `client`
 --
 
-INSERT INTO `client` (`cod_cli`, `pseudo`, `bal_cli`, `nom_ccm`, `nom_cli`, `com_cli`, `sir_cli`, `cod_tva`, `tel_cli`, `gsm_cli`, `fax_cli`, `bal_sec_cli`, `dat_cre_cli`, `dat_sup_cli`, `act_cli`, `dat_con_cli`, `session_cli`) VALUES
-(1, 'Alexouille', 'alex.habchi@orange.fr', 'Alexandra ccm', 'Alexandra Habchi', 'undefined', '', '', '0442065471', '0645274369', '', 'alex_hab@hotmail.fr', '2014-03-27', NULL, 'O', NULL, NULL),
-(2, 'issam13', 'i.ihc@orange.fr', 'Issam ccm', 'Issam Habchi', 'undefined', '', '', '', '', '', '', '2014-03-27', NULL, 'O', NULL, NULL);
 
 --
 -- Structure de la table `fabricant`
@@ -213,11 +210,12 @@ INSERT INTO `famille` (`cod_fam`, `lib_fam`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `identifiant` (
-  `cod_ide` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Code d''identification',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Code d''identification',
+  `id_cli` int(11) NOT NULL COMMENT 'Code client',
   `pseudo` varchar(45) NOT NULL COMMENT 'Pseudo utilisateur',
-  `bal_cli` varchar(45) NOT NULL COMMENT 'Adresse mail client',
-  `val_ide` char(1) NOT NULL DEFAULT 'N' COMMENT 'Blocage du compte (O/N)',
-  `num_ses` varchar(10) DEFAULT NULL COMMENT 'Numero de la derniere session',
+  `email` varchar(45) NOT NULL COMMENT 'Adresse mail client',
+  `valid` BOOLEAN( 1 ) NOT NULL DEFAULT '1' COMMENT 'Blocage du compte',
+  `session` varchar(10) DEFAULT NULL COMMENT 'Numero de la derniere session',
   PRIMARY KEY (`cod_ide`),
   UNIQUE KEY `pseudo` (`pseudo`),
   UNIQUE KEY `bal_cli` (`bal_cli`)

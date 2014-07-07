@@ -3,11 +3,26 @@
 /**
  * Gestion table `client`
  *
- * `id` int(11) NOT NULL AUTO_INCREMENT,
- * `login` varchar(255) NOT NULL,
- * `email` varchar(255) NOT NULL,
- * `profil` varchar(255) NOT NULL,
- * `supprimer` tinyint(1) NOT NULL DEFAULT '0',
+ * `cod_cli` int(11) NOT NULL AUTO_INCREMENT,
+ * `pseudo` varchar(45) NOT NULL COMMENT 'Pseudo de connexion',
+ * `bal_cli` varchar(45) NOT NULL COMMENT 'Adresse mail principale',
+ * `nom_ccm` varchar(45) NOT NULL COMMENT 'Nom commercial de l''entreprise',
+ * `nom_cli` varchar(40) DEFAULT NULL COMMENT 'Nom du(des) contact(s) ou responsable(s)',
+ * `com_cli` varchar(250) DEFAULT NULL COMMENT 'Commentaire',
+ * `sir_cli` varchar(25) DEFAULT NULL COMMENT 'Numero de siret + code etablissement',
+ * `cod_tva` varchar(25) DEFAULT NULL COMMENT 'code tva intra-communautaire',
+ * `tel_cli` varchar(15) DEFAULT NULL COMMENT 'Numero de téléphone fixe',
+ * `gsm_cli` varchar(15) DEFAULT NULL COMMENT 'Numero de telephone mobile',
+ * `fax_cli` varchar(15) DEFAULT NULL COMMENT 'Numero de fax',
+ * `bal_sec_cli` varchar(45) DEFAULT NULL COMMENT 'Adresse mail secondaire',
+ * `dat_cre_cli` date NOT NULL COMMENT 'Date de creation du client',
+ * `dat_sup_cli` date DEFAULT NULL COMMENT 'Date de suppression',
+ * `act_cli` varchar(1) NOT NULL DEFAULT 'O' COMMENT 'En activité (par default = O, suppression logique = N)',
+ * `dat_con_cli` date DEFAULT NULL COMMENT 'Date de la derniere connexion',
+ * `session_cli` varchar(10) DEFAULT NULL COMMENT 'Numero de session du client',
+ * PRIMARY KEY (`cod_cli`),
+ * UNIQUE KEY `pseudo` (`pseudo`),
+ * UNIQUE KEY `bal_cli` (`bal_cli`)
  *
  * @author Alexandra
  * @category Models
@@ -18,7 +33,7 @@ class ClientModel extends Model
 {
     public function find($id)
     {
-    	$query = "SELECT * FROM `client` WHERE id=:id";
+    	$query = "SELECT * FROM `client` WHERE cod_cli=:id";
     	
     	$statement = $this->getDb()->prepare($query);
     	$statement->bindParam(':id', $id);
