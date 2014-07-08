@@ -23,7 +23,11 @@ class IdentifiantModel extends Model
 {
     public function find($id) 
     {
-    	$query = "SELECT * FROM `identifiant` WHERE id_cli=:id";
+    	$query = "SELECT * 
+    			    FROM `identifiant`
+    			    JOIN client
+    			      ON client.id = identifiant.id_cli 
+    			   WHERE id_cli=:id";
     	
     	$statement = $this->getDb()->prepare($query);
     	$statement->bindParam(':id', $id);

@@ -62,7 +62,8 @@ class HomeController extends Controller
     	} elseif($result['valid'] == 0) {
     		$errMessages[] = $errors->find('ERR-003');
     	} else {
-    		$this->request->getSession()->setNamespace('user', $result);
+    		$client = $ideModel->find($result['id_cli']);
+    		$this->request->getSession()->setNamespace('user', $client);
     		$newClient = new ClientModel;
     		$newClient->updateLastConnect($result['id_cli']);
     		$pwdModel = new PasswordModel();

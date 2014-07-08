@@ -75,12 +75,13 @@ function Select_Option(val,opt)
 // Elimine les lignes qui ne correspond pas à la recherche
 function filtre_data(T, O)  		// T=tableau de Data; O=Objet du Filtre
 {
+	if(O == undefined) return T;
   var a, j;   var tab=[];
-  var reg=new RegExp(O,"i");        // Expression Reguliere ignore la difference entre miniscule, Majuscule  
+  var reg=new RegExp(O,"i");      // Expression Reguliere ignore la difference entre miniscule, Majuscule  
   tab[0]=T[0]; j=1;                 // Il s'agit de Sauvegarder la 1er Ligne ( Entete)     
   for (var i=1; i<T.length; i++) 
     { 
-      a=T[i].join("");              // On Concatene l'ensembles des elements de la ligne
+      a=T[i].join("");              // On Concatene l'ensemble des elements de la ligne
       if (a.match(reg)) 
          { tab[j]=T[i]; j++;}       // On ajoute la ligne au cas ou l'objet est trouvé
     }
@@ -113,9 +114,18 @@ function sort_data_col(T, C)      // T=Tableau  C=Colonne
 // Fonction principal .............. 
 function pagine(Input)
 {
-  data=Input; dat_ini=Input; 
-  var rech=$("#search").val();
-  data=filtre_data(dat_ini, rech );
+	data = [];
+	for(var j in Input) {
+		var ligne = [];
+		for(var i = 0; i<Input[0].length; i++) {
+			 ligne.push(Input[j][i]);
+		}
+		data.push(ligne);
+	}
+	
+  dat_ini=data; 
+  var rech = $("#search").val();
+  data=filtre_data(dat_ini, rech);
   $("#section_pagine").remove();
   $("#corps_pagine").append('<div class="col-lg-12" id="section_pagine"></div>');   		// Definition de la section de pagination
   $("#section_pagine").append('<div class="row" id="section_haut"></div>');   // section contenant le Select des Page + Recherche
@@ -235,30 +245,16 @@ function data_page(N)   // N=Numero de la Page.
   NUM_page=N;  
   Deb=(N-1)*NBL_page+1;  
   Fin=N*NBL_page+1;    if (Fin > data.length) Fin=data.length;
-  
   $(".lig").remove(); 
   for (var i=Deb; i<Fin; i++)
   {
-    $("#cor_tab").append('<tr class="lig" id="lig'+i+'" OnClick="CLIC_Data_Page(\''+data[i][0]+'\')"></tr>');
-    for (j=0; j<data[i].length; j++)
+    $("#cor_tab").append('<tr class="lig" id="lig'+i+'"></tr>');
+    for (j=0; j<data[0].length; j++)
     {
-      if (typeof(T_PAGINE[j])=='undefined') $("#lig"+i).append('<td>'+data[i][j]+'</td>');
-      else 
-       {
-          if (T_PAGINE[j][0]==0) ; 
-          if (T_PAGINE[j][1]==1) 
-               $("#lig"+i).append('<td id="case'+i+'"> <a href="'+data[i][j]+'" target="_blanck" >'+data[i][T_PAGINE[j][2]]+'</a></td>');
-          if (T_PAGINE[j][1]==2) 
-               $("#lig"+i).append('<td id="case'+i+'"> <img src="'+T_PAGINE[j][2]+'" alt="" style="height:'+T_PAGINE[j][3]+' ; width:'+T_PAGINE[j][4]+'"/></td>');
-          if (T_PAGINE[j][1]==3)   
-            $("#lig"+i).append('<td id="case'+i+'"> <a href="'+data[i][j]+'" target="_blanck" >'+
-              '<img src="'+T_PAGINE[j][3]+'" alt="" style="height:'+T_PAGINE[j][4]+' ; width:'+T_PAGINE[j][5]+'"/></a></td>');
-       }
+      $("#lig"+i).append('<td>'+data[i][j]+'</td>');
     }  // for j=
   } //for i=
 } // function
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-

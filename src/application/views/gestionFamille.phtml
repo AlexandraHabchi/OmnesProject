@@ -1,0 +1,26 @@
+<?php //if(empty($this->user)) Url::redirect("/home"); ?>
+<div class="col-sm-3">
+	<form role="form" id="famille" name="famille" method="post">
+		<h1 class="text-center">Saisie des familles</h1>
+		<div class="form-group">
+			<label for="code">Code</label>
+			<input type="text" class="form-control data" id="code" size="30" OnBlur="OnVide('code')">
+		</div>
+		<div class="form-group">
+			<label for="lib">Libellé</label>
+			<input type="text" class="form-control data" id="lib" onBlur="OnVide('lib')">
+		</div>
+		<input name="create" id="create" type="submit" value="Valider" class="btn btn-default btn-sm"/>
+
+		<!-- ===========================  Partie  Cache   ================================ -->
+		<div class='hidden'>
+		  <span id="Ident">,</span> <span id="flag">,</span>
+		</div>
+		<!-- ========================== fin div cachée =================================== -->
+	</form>
+	<div class="text-alert text-center" id="alerte"></div>
+</div>
+<div class="col-sm-9" id="corps_pagine">
+    
+</div>
+

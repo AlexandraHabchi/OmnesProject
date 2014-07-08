@@ -27,16 +27,16 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `famille` (
-  `fam_cod` varchar(5) NOT NULL,
-  `lib_fam` varchar(45) NOT NULL COMMENT 'Libellé',
-  PRIMARY KEY (`fam_cod`)
+  `code` varchar(5) NOT NULL,
+  `lib` varchar(45) NOT NULL COMMENT 'Libellé',
+  PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `famille`
 --
 
-INSERT INTO `famille` (`fam_cod`, `lib_fam`) VALUES
+INSERT INTO `famille` (`code`, `lib`) VALUES
 ('11000', 'Soins du visage       '),
 ('11100', 'Soins du visage       '),
 ('11110', 'PS (Peaux sèches) et PTS (Peaux très sèches) '),
@@ -1121,7 +1121,7 @@ INSERT INTO `famille` (`fam_cod`, `lib_fam`) VALUES
 ('52562', 'Compresses hémostatiques        '),
 ('52570', 'Mycoses         '),
 ('52580', 'Parasitoses dermiques        ');
-INSERT INTO `famille` (`fam_cod`, `lib_fam`) VALUES
+INSERT INTO `famille` (`code`, `lib`) VALUES
 ('52590', 'Autres produits dermatologie       '),
 ('52600', 'Gynécologie. Urologie        '),
 ('52610', 'Tests de grossesse et d''ovulation     '),

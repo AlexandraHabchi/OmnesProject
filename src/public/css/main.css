@@ -5,3 +5,22 @@
 .inline {
 	display : inline-block;
 }
+
+#pagine > li > input {
+  position 		   : relative;
+  float            : left;
+  margin-left      : -1px;
+  padding          : 5px 10px;
+  font-size        : 12px;
+  line-height      : 1.42857143;
+  color            : #4533C2;
+  text-decoration  : none;
+  background-color : #fff;
+  border  		   : 1px solid #ddd;
+}
+#pagine > li > input:hover,
+#pagine > li > input:focus {
+  color : #FFFFFF;
+  background-color: #4533C2;
+  outline : 0;
+}

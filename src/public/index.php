@@ -24,6 +24,7 @@ require_once LIBRARY_PATH . DS . 'Email.php';
 require_once MODEL_PATH . DS . 'Client.php';
 require_once MODEL_PATH . DS . 'Password.php';
 require_once MODEL_PATH . DS . 'Identifiant.php';
+require_once MODEL_PATH . DS . 'Famille.php';
 require_once MODEL_PATH . DS . 'Error.php';
 
 $request = new Request;
