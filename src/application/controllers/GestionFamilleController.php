@@ -16,20 +16,38 @@ class GestionFamilleController extends Controller
         if($this->request->getMethod() == 'GET'){
         	$params = $this->request->getParams();
         	$entete = array('Code', 'Libellé');
-        	if(isset($params['context'])) {
+        	
+        	if(isset($params['context']) && isset($params['click'])) {
+        		$model = new FamilleModel;
+        		$elmt = $model->find($params['click']);
+        		echo json_encode($elmt); exit;
+        	} 
+        	
+        	elseif(isset($params['context'])) {
         		$model = new FamilleModel;
         		$list = $model->fetchAll();
         		array_unshift($list, $entete);
         		echo json_encode($list); exit;
         	}
+        	
         }
         
         if($this->request->getMethod() == 'POST'){
         	$data = $this->request->getParams();
         	
+        	$errMessages = array();
+        	$validMessages = array();
+        	$errors = new ErrorModel();
+        	$model = new FamilleModel();
+        	 
         	/* Création */
-        	if(isset($data['create'])) {
+        	if(isset($data['create']) && empty($data['ident'])) {
         		$this->create($data);
+        	}
+        	
+        	/* Modification */
+        	if(isset($data['create']) && !empty($data['ident'])) {
+        		$this->update($data);
         	}
         	
         	/* Suppression */
@@ -42,11 +60,6 @@ class GestionFamilleController extends Controller
         		}
         	}
         	
-        	/* Modification */
-        	if(isset($data['modif']) && isset($data['id'])) {
-        		$this->request->getSession()->setNamespace('id_modif', $data['id']);
-        		Url::redirect("/modifierClient");
-        	}
         }
     }
     
@@ -55,53 +68,38 @@ class GestionFamilleController extends Controller
     	$errMessages = array();
     	$validMessages = array();
     	$errors = new ErrorModel();
-    	$ideModel = new IdentifiantModel;
+    	$model = new FamilleModel();
     	
-    	if(empty($data['nom_ccm'])){
-    		$errMessages[] = 'Nom commercial obligatoire';
+    	if($model->find($data['code'])) {
+    		$errMessages[] = 'Cet élément existe déjà !';
     	}
-    	
-    	if(empty($data['pseudo'])){
-    		$errMessages[] = 'Pseudo obligatoire';
-    	}
-    	
-    	if(empty($data['email']) || !Email::isEmail($data['email'])){
-    		$errMessages[] = 'Email valide obligatoire';
-    	}
-    	 
-    	if(empty($errMessages)) {
-    		$clientModel = new ClientModel();
-    		if($clientModel->findByPseudo($data['pseudo'])) {
-    			$errMessages[] = 'Cet identifiant existe déjà, choisissez-en un autre !';
-    		}
-    		if($clientModel->findByEmail($data['email'])) {
-    			$errMessages[] = 'Cet e-mail est déjà utilisé !';
-    		}
     		
-    		if(empty($errMessages)) {
-    			$users_result = $clientModel->fetchAll();
-    			 
-    			if(empty($users_result)) {
-    				$result = $clientModel->create($data['pseudo'], $data['email'], $data['nom_ccm'], "Admin");
-    			} else {
-    				$result = $clientModel->create($data['pseudo'], $data['email'], $data['nom_ccm'], "Client");
-    			}
-    			 
-    			if (FALSE == $result) {
-    				$errMessages[] = $errors->find('ERR-005');
-    			} else {
-    				$validMessages[] = $errors->find('MSG-002');
-    				Url::redirect("/gestionClient");
-    			}
+    	if(empty($errMessages)) {
+    		$result = $model->create($data['code'], $data['lib']);
+    			
+    		if (FALSE == $result) {
+    			$errMessages[] = $errors->find('ERR-005');
+    		} else {
+    			$validMessages[] = $errors->find('MSG-002');
+    			Url::redirect("/gestionFamille");
     		}
-    	
     	}
     	
     	$this->view->errMessages = $errMessages;
     	$this->view->validMessages = $validMessages;
-    	$this->view->inputs = array(
-    			'nom_ccm' => $data['nom_ccm'],
-    			'pseudo' => $data['pseudo'],
-    			'email' => $data['email']);
+    }
+    
+    private function update($data)
+    {
+    	
+    	$result = $model->update($data['code'], $data['lib']);
+    		 
+    	if (FALSE == $result) {
+    		$errMessages[] = $errors->find('ERR-005');
+    	} else {
+    		$validMessages[] = $errors->find('MSG-002');
+    		Url::redirect("/gestionFamille");
+    	}
+    	
     }
 }

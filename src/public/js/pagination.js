@@ -45,7 +45,25 @@
 var T_PAGINE= new Array;                  // Tableau d'attribut d'affichage ......
 var HEADER_PAGINE='';             // Variable Contenant une description du tableau
 
-function CLIC_Data_Page(Cle) {}
+function CLIC_Data_Page(Cle) {
+	var id = ucfirst(getId());
+	$.ajax({
+	  url      : "/gestion" + id + "?context=html&click="+Cle,
+	  type     : "GET",
+	  dataType : "json",
+	  success  : function(result) {
+		  $("#ident").val(result[0]);
+		  for (var i in result) {
+			  i = parseInt(i);
+			  if(!isNaN(i)) {
+				  $(".data")[i].value = result[i];
+			  }
+		  }
+		  
+	  }// end success
+	});
+}
+
 function CLIC_Sort_Col(Col) {}
 // #############     Fin des variables et fonction Externe        ############################
 
@@ -248,7 +266,7 @@ function data_page(N)   // N=Numero de la Page.
   $(".lig").remove(); 
   for (var i=Deb; i<Fin; i++)
   {
-    $("#cor_tab").append('<tr class="lig" id="lig'+i+'"></tr>');
+    $("#cor_tab").append('<tr class="lig" id="lig'+i+'" OnClick="CLIC_Data_Page(\''+data[i][0]+'\')"></tr>');
     for (j=0; j<data[0].length; j++)
     {
       $("#lig"+i).append('<td>'+data[i][j]+'</td>');
