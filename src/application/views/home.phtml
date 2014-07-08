@@ -2,7 +2,7 @@
 <div class="col-sm-4 col-sm-offset-4" id="connexion">
     <h1 class="text-center">Login</h1>
     <?php if (!empty($this->errMessages)) : ?>
-    	<ul class="list-group">
+    	<ul class="list-group" id="erreurs">
     	<?php foreach ($this->errMessages as $value) : ?>
 			<li class="list-group-item list-group-item-danger"><?= $value ?></li>
     	<?php endforeach; ?>
@@ -19,7 +19,7 @@
 	    	</div>
 	       <input name="connect" id="connect" type="Submit" class="btn btn-default btn-sm"/>
 	    </form>
-	    <a href="">Mot de passe oublié ?</a>
+	    <p class="text-right"><a href="">Mot de passe oublié ?</a></p>
 	    <br>
 </div>	    
 <?php else : ?>

@@ -6,11 +6,11 @@
   `id_cli` int(11) NOT NULL COMMENT 'Code d''identification',
   `hashed` varchar(250) NOT NULL COMMENT 'Mot de passe',
   `clear` varchar(250) NOT NULL COMMENT 'Mot de passe',
-  `change` tinyint(1) DEFAULT '1' COMMENT 'Changement obligatoire de mot de passe',
+  `changer` tinyint(1) DEFAULT '1' NOT NULL COMMENT 'Changement obligatoire de mot de passe',
   `nbr_cnx` int(11) DEFAULT NULL COMMENT 'Nombre de connexions avec le meme mot de passe',
   `last_chg` date DEFAULT NULL COMMENT 'Date du dernier changement de mot de passe',
   `nbr_oub` int(11) DEFAULT NULL COMMENT 'Nombre de demandes pour oubli de mot de passe',
-  UNIQUE KEY `id_cli_UNIQUE` (`id_cli`),
+  UNIQUE KEY (`id_cli`),
   KEY `id_cli` (`id_cli`)
  *
  * @author Alexandra
@@ -22,7 +22,18 @@ class PasswordModel extends Model
 {
     public function find($id)
     {
+    	$query = "SELECT * FROM `password` WHERE id_cli=:id";
     	
+    	$statement = $this->getDb()->prepare($query);
+    	$statement->bindParam(':id', $id);
+    	
+    	if($statement->execute() == false) {
+    		$errorInfo = $statement->errorInfo();
+    		echo $errorInfo[2];
+    		exit;
+    	}
+    	
+    	return $statement->fetch();
     }
     
     public function fetchAll()
@@ -60,17 +71,51 @@ class PasswordModel extends Model
     	return TRUE;
     }
     
+    public function oubli($id_cli, $email)
+    {
+    	$query = "UPDATE `password` 
+    				 SET hashed=:password, clear=:clear, last_chg=:last_chg, changer=1
+    			   WHERE id_cli=:id_cli";
+    	
+    	$auj = Date::getDate();
+    	$mdp = $this->generate(6);
+    	$statement = $this->getDb()->prepare($query);
+    	$statement->bindParam(':id_cli', $id_cli);
+    	$statement->bindParam(':password', $this->crypt_password($mdp));
+    	$statement->bindParam(':clear', $mdp);
+    	$statement->bindParam(':last_chg', $auj);
+    	 
+    	if($statement->execute() == false) {
+    		$errorInfo = $statement->errorInfo();
+    		echo $errorInfo[2];
+    		exit;
+    	}
+    	$objet = 'Oubli de votre mot de passe Omnes Pharma';
+    	$msg = 'Voici votre nouveau mot de passe Omnes Pharma a utiliser lors de votre prochaine connexion<br>';
+    	$msg.= 'Votre mot de passe : <b>' . $mdp . '</b>';
+    	 
+    	$OK = Email::envoi($email, $objet, $msg);
+    	 
+    	$errors = new ErrorModel;
+    	if($OK != 1) {
+    		echo $errors->find('ERR-004'); exit;
+    	}
+    	return TRUE;
+    }
+    
     public function update($id_cli, $password)
     {
     	$query = "UPDATE `password` 
-    				 SET hashed=:password, clear=:clear last_chg=:last_chg, nbr_cnx=0, change=0
+    				 SET hashed=:password, clear=:clear, last_chg=:last_chg, nbr_cnx=0, changer=0
     			   WHERE id_cli=:id_cli";
     	
+    	$auj = Date::getDate();
     	$statement = $this->getDb()->prepare($query);
 		$statement->bindParam(':id_cli', $id_cli);
 		$statement->bindParam(':password', $this->crypt_password($password));
 		$statement->bindParam(':clear', $password);
-    	
+		$statement->bindParam(':last_chg', $auj);
+		
     	if($statement->execute() == false) {
     		$errorInfo = $statement->errorInfo();
     		echo $errorInfo[2];

@@ -36,7 +36,7 @@ function bloque(champ)      // Blocage Champ pour la saisie à nouveau
     if (NbLock >= MaxLock) { NbLock=0; return; } 
     ctrl.focus();                                                                                 
     ctrl.select();                          // On selectionne le contenu pour faciliter la reprise de la saisie
-    check[champ]=0;                                               
+    check[champ]=0;
 }
 
 
@@ -314,7 +314,7 @@ function check_form()
     if(check[inputs[i].id]==0) inputs[i].onblur();
     if(inputs[i].type!='button') OK=OK&&check[inputs[i].id];
   }
-  if(OK) { $('#alerte').html('envoi formulaire'); bouton_valide(); }
+  if(OK) { $('#alerte').html('envoi formulaire'); return true; }
 }
 
 // =================================================================================================================

@@ -20,6 +20,29 @@ class HomeController extends Controller
         	
         	/* Mot de passe oublié */
         	if(isset($data['ajax']) && $data['ajax'] == 'oubliPwd') {
+        		$errMessages = array();
+        		$errors = new ErrorModel();
+        		
+        		if(!Email::isEmail($data['email'])) {
+        			$errMessages[] = 'Vous devez renseigner une adresse mail valide pour recevoir un nouveau mot de passe';
+        		} 
+        		
+        		$clientModel = new ClientModel;
+	        	$client = $clientModel->findByEmail($data['email']);
+	        	if(empty($client)) {
+	        		$errMessages[] = $errors->find('ERR-002');
+	        	}
+        		
+        		if(!empty($errMessages)) {
+        			echo json_encode(array('errors' => $errMessages)); exit;
+        		}
+        		
+        		$pwdModel = new PasswordModel;
+        		$result = $pwdModel->oubli($client['id'], $client['email']);
+        		if($result == '1') {
+        			$validMessages = $errors->find('MSG-001');
+        			echo json_encode(array('success' => $validMessages)); exit;
+        		}
         		
         	}
         }
@@ -42,6 +65,11 @@ class HomeController extends Controller
     		$this->request->getSession()->setNamespace('user', $result);
     		$newClient = new ClientModel;
     		$newClient->updateLastConnect($result['id_cli']);
+    		$pwdModel = new PasswordModel();
+    		$pwd = $pwdModel->find($result['id_cli']);
+    		if($pwd['changer'] == 1) {
+    			Url::redirect('changePwd');
+    		}
     	}
     	 
     	if(empty($data['login'])){

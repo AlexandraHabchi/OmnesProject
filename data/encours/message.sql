@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `message` (
 
 INSERT INTO `message` (`id`, `lib`) VALUES
 ('ERR-001', 'Identifiant ou mot de passe incorrects'),
-('ERR-002', 'Mot de passe Incorrect'),
+('ERR-002', 'Ce compte n''existe pas'),
 ('ERR-003', 'Compte bloqué, contactez votre administrateur'),
 ('ERR-004', 'Erreur d''envoi du message'),
 ('ERR-005', 'Problème d''enregistrement des données'),

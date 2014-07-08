@@ -1,0 +1,17 @@
+<h1>Bienvenue</h1>
+<div class="col-sm-4 col-sm-offset-4" id="changePwd">
+    <h1 class="text-center">Veuillez changer votre mot de passe</h1>
+	    <form role="form" method="POST" action="">
+	    	<div class="form-group">
+	    		<label for="login">Nouveau mot de passe : </label>
+	    		<input name="password" id="password" type="password" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['password']?>"<?php endif; ?> onBlur="OnVide('password')"/>
+	    	</div>
+	    	<div class="form-group">
+	    		<label for="password">Confirmer le nouveau mot de passe : </label>
+	    		<input name="confirm_password" id="confirm_password" type="password" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['confirm_password']?>"<?php endif; ?> onBlur="CheckPwd('password', 'confirm_password')"/>
+	    	</div>
+	       <input name="changePwdBtn" id="changePwdBtn" type="Submit" class="btn btn-default btn-sm"/>
+	    </form>
+	    <div id="alerte"></div>
+	    <br>
+</div>
