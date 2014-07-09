@@ -148,7 +148,7 @@ function pagine(Input)
   $("#corps_pagine").append('<div class="col-lg-12" id="section_pagine"></div>');   		// Definition de la section de pagination
   $("#section_pagine").append('<div class="row" id="section_haut"></div>');   // section contenant le Select des Page + Recherche
  
-  $("#section_pagine").append('<div class="row table-responsive"><table class="table table-bordered table-condensed no-margin" id="cor_tab"></table></div>'); 		// Affichage du Tableau 
+  $("#section_pagine").append('<div class="row table-responsive"><table class="table table-bordered table-striped table-condensed" id="cor_tab"></table></div>'); 		// Affichage du Tableau 
   
   $("#section_pagine").append('<div class="row" id="section_bas"></div>'); 			// section d'affichage des boutons de pagination
   construct_header();   $("#search").val(rech);
@@ -181,13 +181,13 @@ function CLIC_Sort_Col(Col)
 // Constreuction de la section "ENTETE"
 function construct_header()
 {
-  $("#section_haut").append('<div class="col-lg-4 form-group no-margin" id="select_nbl"></div>');
+  $("#section_haut").append('<div class="col-lg-4 form-group form-inline align-left" id="select_nbl"></div>');
   $("#section_haut").append('<div class="col-lg-5" id="title"></div>');
-  $("#section_haut").append('<div class="col-lg-3" id="search_barre"></div>');
+  $("#section_haut").append('<div class="col-lg-3 align-right" id="search_barre"></div>');
 
-  $("#select_nbl").append('<label for="nbl" class="control-label inline">Affiche</label>');
+  $("#select_nbl").append('<label for="nbl" class="control-label inline">Affiche &nbsp;</label>');
   $("#select_nbl").append('<select class="form-control inline" id="nbl" onChange="change_pagination()">');
-  $("#select_nbl").append('<label for="nbl" class="control-label inline">lignes par page</label>');
+  $("#select_nbl").append('<label for="nbl" class="control-label inline">&nbsp; lignes / page</label>');
 
   for (i=0; i<PAGE_TAB_SEL.length; i++)    // Remplissage du Select
      $("#nbl").append(Select_Option(PAGE_TAB_SEL[i], PAGE_TAB_SEL[i]));

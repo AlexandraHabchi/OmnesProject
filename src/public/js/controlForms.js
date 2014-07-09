@@ -290,6 +290,7 @@ function OnPostal(champ)
 // A placer dans la methode OnLoad du Body
 function ini_check()
 {
+	console.log('ini_check()');
   var inputs = document.getElementsByTagName('input');
   for(var i=0; i<inputs.length; i++)
   {

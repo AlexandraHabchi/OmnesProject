@@ -1,0 +1,67 @@
+<?php //if(empty($this->user)) Url::redirect("/home"); ?>
+<div class="col-sm-3">
+	<form role="form" id="produit" name="produit" method="post">
+		<h1 class="text-center">Saisie des produits</h1>
+		<input type="text" class="hidden data" name="id">
+		<div class="form-group">
+			<label for="lib_prd">Libellé</label>
+			<input type="text" class="form-control data" name="lib_prd" id="lib_prd" size="30" OnBlur="OnVide('lib_prd')">
+		</div>
+		<div class="form-group">
+			<label for="tva_cod">TVA</label>
+			<select class="form-control data" name="tva_cod" id="tva_cod">
+			<?php foreach($this->codestva as $elmt) : ?>
+				<option value="<?= $elmt['cod_tva']?>"><?= $elmt['tau_tva']?></option>
+			<?php endforeach; ?>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="fam_cod">Famille</label>
+			<select class="form-control data" name="fam_cod" id="fam_cod">
+			<?php foreach($this->familles as $elmt) : ?>
+				<option value="<?= $elmt['code']?>"><?= $elmt['lib']?></option>
+			<?php endforeach; ?>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="lab_cod">Fabricant</label>
+			<select class="form-control data" name="lab_cod" id="lab_cod">
+			<?php foreach($this->fabricants as $elmt) : ?>
+				<option value="<?= $elmt['cod_lab']?>"><?= $elmt['nom_lab']?></option>
+			<?php endforeach; ?>
+			</select>
+		</div>
+		<div class="form-group col-sm-6 align-left">
+			<label for="prx_cat">Prix catalogue</label>
+			<input type="text" class="form-control data" name="prx_cat" id="prx_cat" size="30" OnBlur="OnFloat('prx_cat')">
+		</div>
+		<div class="form-group col-sm-6 align-right">
+			<label for="prx_net">Prix net</label>
+			<input type="text" class="form-control data" name="prx_net" id="prx_net" size="30" OnBlur="OnFloat('prx_net')">
+		</div>
+		<div class="form-group">
+			<label for="nbp_col">Nombre de produits par colis</label>
+			<input type="text" class="form-control data" name="nbp_col" id="nbp_col" size="30" OnBlur="OnNumber('nbp_col')">
+		</div>
+		<input type="text" class="hidden data" name="dat_der_cmd">
+		<div class="form-group">
+			<label for="dat_pro_cmd">Date de la prochaine commande</label>
+			<input type="text" class="form-control data" name="dat_pro_cmd" id="dat_pro_cmd">
+		</div>
+		<label for="cdt_ccm">Conditions commerciales</label>
+		<textarea cols="5" class="form-control data" name="cdt_ccm" id="cdt_ccm"></textarea>
+		
+		<input name="create" id="create" type="submit" value="Valider" class="btn btn-default btn-sm"/>
+		<input name="supp" id="supp" type="submit" value="Supprimer" class="btn btn-default btn-sm pull-right"/>
+
+		<!-- ===========================  Partie  Cache   ================================ -->
+		<div class='hidden'>
+		  <input type="text" id="ident" name="ident">
+		</div>
+		<!-- ========================== fin div cachée =================================== -->
+	</form>
+	<div class="text-alert text-center" id="alerte"></div>
+</div>
+<div class="col-sm-9" id="corps_pagine">
+    
+</div>
