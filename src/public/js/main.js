@@ -43,6 +43,18 @@ $("#changePwdBtn").click(function(e){
 	}
 });
 
+if($("form").get(0)) {
+	ini_check();
+}
+
+$("#create").click(function(e){
+	e.preventDefault();
+	if(check_form()) {
+		$(e.target).unbind('click');
+		$(e.target).click();
+	}
+});
+
 if($("#corps_pagine").get(0)) {
 	var id = ucfirst(getId());
 	$.ajax({

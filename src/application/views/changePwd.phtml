@@ -11,6 +11,7 @@
 	    		<input name="confirm_password" id="confirm_password" type="password" class="form-control" <?php if(isset($this->inputs)) : ?>value="<?= $this->inputs['confirm_password']?>"<?php endif; ?> onBlur="CheckPwd('password', 'confirm_password')"/>
 	    	</div>
 	       <input name="changePwdBtn" id="changePwdBtn" type="Submit" class="btn btn-default btn-sm"/>
+	       <input name="later" id="later" type="Submit" value="Plus tard" class="btn btn-default btn-sm pull-right"/>
 	    </form>
 	    <div id="alerte"></div>
 	    <br>

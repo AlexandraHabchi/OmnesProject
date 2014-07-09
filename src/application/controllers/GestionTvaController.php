@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Controller Gestion Famille
+ * Controller Gestion TVA
  * @author Alexandra
  *
  */
-class GestionFamilleController extends Controller
+class GestionTvaController extends Controller
 {
     public function action()
     {
@@ -15,7 +15,7 @@ class GestionFamilleController extends Controller
         
         if($this->request->getMethod() == 'GET'){
         	$params = $this->request->getParams();
-        	$model = new FamilleModel;
+        	$model = new TvaModel;
         	$entete = $model->getCols();
         	
         	if(isset($params['context']) && isset($params['click'])) {
@@ -24,7 +24,6 @@ class GestionFamilleController extends Controller
         	} 
         	
         	elseif(isset($params['context'])) {
-        		$model = new FamilleModel;
         		$list = $model->fetchAll();
         		array_unshift($list, $entete);
         		echo json_encode($list); exit;
@@ -38,22 +37,22 @@ class GestionFamilleController extends Controller
         	$errMessages = array();
         	$validMessages = array();
         	$errors = new ErrorModel();
-        	$model = new FamilleModel();
+        	$model = new TvaModel;
         	 
         	/* Création */
         	if(isset($data['create']) && empty($data['ident'])) {
-        		if($model->find($data['code'])) {
+        	if($model->find($data['code'])) {
 		    		$errMessages[] = 'Cet élément existe déjà !';
 		    	}
 		    		
 		    	if(empty($errMessages)) {
-		    		$result = $model->create($data['code'], $data['lib']);
+		    		$result = $model->create($data['code'], $data['lib'], $data['taux']);
 		    	}
         	}
         	
         	/* Modification */
         	if(isset($data['create']) && !empty($data['ident'])) {
-        		$result = $model->update($data['code'], $data['lib']);
+        		$result = $model->update($data['ident'], $data['lib'], $data['taux']);
         	}
         	
         	/* Suppression */
@@ -66,7 +65,7 @@ class GestionFamilleController extends Controller
 	        		$errMessages[] = $errors->find('ERR-005');
 	        	} else {
 	        		$validMessages[] = $errors->find('MSG-002');
-	        		Url::redirect("/gestionFamille");
+	        		Url::redirect("/gestionTva");
 	        	}
         	}
         	

@@ -1,15 +1,21 @@
 <?php //if(empty($this->user)) Url::redirect("/home"); ?>
 <div class="col-sm-3">
-	<form role="form" id="famille" name="famille" method="post">
-		<h1 class="text-center">Saisie des familles</h1>
+	<form role="form" id="tva" name="tva" method="post">
+		<h1 class="text-center">Saisie des taux de TVA</h1>
 		<div class="form-group">
 			<label for="code">Code</label>
 			<input type="text" class="form-control data" name="code" id="code" size="30" OnBlur="OnVide('code')">
 		</div>
 		<div class="form-group">
 			<label for="lib">Libellé</label>
-			<input type="text" class="form-control data" name="lib" id="lib" onBlur="OnVide('lib')">
+			<input type="text" class="form-control data" name="lib" id="lib" size="30" OnBlur="OnVide('lib')">
 		</div>
+		<div class="form-group">
+			<label for="taux">Taux</label>
+			<input type="text" class="form-control data" name="taux" id="taux" onBlur="OnVide('taux')">
+		</div>
+		<input type="text" class="hidden data">
+		
 		<input name="create" id="create" type="submit" value="Valider" class="btn btn-default btn-sm"/>
 		<input name="supp" id="supp" type="submit" value="Supprimer" class="btn btn-default btn-sm pull-right"/>
 
@@ -24,4 +30,3 @@
 <div class="col-sm-9" id="corps_pagine">
     
 </div>
-
