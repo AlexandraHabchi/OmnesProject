@@ -78,3 +78,6 @@ function getId()
 {
 	return document.getElementsByTagName('form')[0].attributes['id'].nodeValue;
 }
+
+$( "select" ).combobox();
+
