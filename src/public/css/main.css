@@ -24,3 +24,11 @@
   background-color: #4533C2;
   outline : 0;
 }
+
+.align-left {
+	padding-left : 0;
+}
+
+.align-right {
+	padding-right : 0;
+}

@@ -1,7 +1,7 @@
 <?php 
 
 /**
- * Gestion table `famille`
+ * Gestion table `tauxtva`
  * 
   `cod_tva` int(2) NOT NULL,
   `lib_tva` varchar(45) NOT NULL COMMENT 'Libellé',

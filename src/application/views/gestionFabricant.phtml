@@ -1,0 +1,57 @@
+<?php //if(empty($this->user)) Url::redirect("/home"); ?>
+<div class="col-sm-3">
+	<form role="form" id="fabricant" name="fabricant" method="post">
+		<h1 class="text-center">Saisie des fabricants</h1>
+		<input type="text" class="hidden data" name="code">
+		<div class="form-group">
+			<label for="name">Nom du labo</label>
+			<input type="text" class="form-control data" name="name" id="name" size="30" OnBlur="OnVide('name')">
+		</div>
+		<div class="form-group">
+			<label for="website">Site web</label>
+			<input type="text" class="form-control data" name="website" id="website" size="30">
+		</div>
+		<div class="form-group col-sm-6 align-left">
+			<label for="tel">Téléphone</label>
+			<input type="text" class="form-control data" name="tel" id="tel">
+		</div>
+		<div class="form-group col-sm-6 align-right">
+			<label for="fax">Fax</label>
+			<input type="text" class="form-control data" name="fax" id="fax">
+		</div>
+		<div class="form-group">
+			<label for="email">Email</label>
+			<input type="text" class="form-control data" name="email" id="email" size="30">
+		</div>
+		<div class="form-group">
+			<label for="nom_rep">Nom du représentant</label>
+			<input type="text" class="form-control data" name="nom_rep" id="nom_rep" size="30">
+		</div>
+		<div class="form-group col-sm-6 align-left">
+			<label for="tel_rep">Téléphone</label>
+			<input type="text" class="form-control data" name="tel_rep" id="tel_rep">
+		</div>
+		<div class="form-group col-sm-6 align-right">
+			<label for="fax_rep">Fax</label>
+			<input type="text" class="form-control data" name="fax_rep" id="fax_rep">
+		</div>
+		<div class="form-group">
+			<label for="email_rep">Email</label>
+			<input type="text" class="form-control data" name="email_rep" id="email_rep" size="30">
+		</div>
+		<label for="comment">Commentaires</label>
+		<textarea cols="5" class="form-control data" name="comment" id="comment"></textarea>
+		<input name="create" id="create" type="submit" value="Valider" class="btn btn-default btn-sm"/>
+		<input name="supp" id="supp" type="submit" value="Supprimer" class="btn btn-default btn-sm pull-right"/>
+
+		<!-- ===========================  Partie  Cache   ================================ -->
+		<div class='hidden'>
+		  <input type="text" id="ident" name="ident">
+		</div>
+		<!-- ========================== fin div cachée =================================== -->
+	</form>
+	<div class="text-alert text-center" id="alerte"></div>
+</div>
+<div class="col-sm-9" id="corps_pagine">
+    
+</div>
