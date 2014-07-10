@@ -48,6 +48,8 @@ class HomeController extends Controller
         }
         
         $this->view->user = $this->request->getSession()->getNamespace('user');
+        $produit = new ProduitModel();
+        $this->view->produits = $produit->fetchAll();
     }
     
     private function verifId($data) 

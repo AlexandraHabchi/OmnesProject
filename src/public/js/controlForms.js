@@ -12,7 +12,6 @@ var check = {};
 //=================================================================================================================
 function OnAlerte(champ, mess)  // message d'alerte dans le Div "alerte"
 {
-  console.log(mess);
   if(mess!='') {
   	  NbLock = 0;
       if($("#alerte").html() == '') { $("#alerte").append(mess); bloque(champ); }
@@ -322,7 +321,6 @@ function OnFile(champ, oblig, taille_max)
 //A placer dans la methode OnLoad du Body
 function ini_check()
 {
-	console.log('ini check');
 	var inputs = document.getElementsByTagName('input');
 	for(var i=0; i<inputs.length; i++) {
 		if(inputs[i].type!='button') {
@@ -341,7 +339,6 @@ function ini_check()
 //A placer dans la methode OnClick du bouton de validation du formulaire
 function check_form()
 {
-	console.log('check form');
 	$("#alerte").html(''); NbLock = 0;
 	var OK = 1;
 	var inputs = document.getElementsByTagName('input');

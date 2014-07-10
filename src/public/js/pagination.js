@@ -48,10 +48,6 @@ var T_PAGINE= new Array;          // Tableau d'attribut d'affichage ......
 var HEADER_PAGINE='';             // Variable Contenant une description du tableau
 
 function CLIC_Data_Page(Cle) {
-	if(typeof Cle == 'array') {
-		console.log('tableau');
-		return;
-	}
 	var id = ucfirst(getId());
 	$.ajax({
 	  url      : "/gestion" + id + "?context=html&click="+Cle,
@@ -70,7 +66,6 @@ function CLIC_Data_Page(Cle) {
 					  var opt = $(".data option[value='" + result[i] + "']")[0];
 					  $(opt).attr("selected", "selected");
 					  $(".ui-autocomplete-input")[j].value = $(opt)[0].text;
-					  //$("form select").combobox();
 				  }
 			  }
 		  }

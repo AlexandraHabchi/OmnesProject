@@ -24,4 +24,58 @@
 </div>	    
 <?php else : ?>
     <h1>Bienvenue <?= $this->user['pseudo'] ?></h1>
+    <?php if($this->user['profil'] != 'Admin') : ?>
+    <table class="table table-striped table-responsive table-condensed">
+    	<thead>
+    		<th class="hidden">Code</th>
+    		<th>Libellé</th>
+			<th>Famille</th>
+			<th>Labo</th>
+			<th>Prix catalogue</th>
+			<th>Prix net</th>
+			<th>Nombre de produits par colis</th>
+			<th>Quantité de colis</th>
+			<th>Total produits</th>
+			<th>Total prix</th>
+			<th>Actions</th>
+    	</thead>
+    	<tbody>
+    	<?php foreach ($this->produits as $produit) : ?>
+    		<tr>
+    			<td class="hidden"><?= $produit['id']; ?></td>
+    			<td><?= $produit['lib_prd']; ?></td>
+    			<td><?= $produit['lib']; ?></td>
+    			<td><?= $produit['nom_lab']; ?></td>
+    			<td><?= $produit['prx_cat']; ?></td>
+    			<td id="prx"><?= $produit['prx_net']; ?></td>
+    			<td id="colis"><?= $produit['nbp_col']; ?></td>
+    			<td><input type="text" class="form-control" id="qte" name="qte" onBlur="OnNumber('qte')" /></td>
+    			<td id="tot_prd"></td>
+    			<td id="tot_prx"></td>
+    			<td><input type="button" class="btn btn-default btn-sm" id="command" name="command" value="Commander"/></td>
+    		</tr>
+    	<?php endforeach; ?>
+    	</tbody>
+    </table>
+    <div class="text-alert text-center" id="alerte"></div>
+	<?php endif; ?>
 <?php endif; ?>
+
+<script type="text/javascript">
+	$("input#qte").keyup(function(e) {
+		var elmt = $(e.target.parentNode).context;
+		var tot_qte = elmt.nextElementSibling;
+		var colis = elmt.previousElementSibling;
+		var tot_prx = tot_qte.nextElementSibling;
+		var prx_net = colis.previousElementSibling;
+
+		var tot_prd = parseInt(colis.innerHTML) * parseInt($(e.target).val());
+		if(isNaN(tot_prd)) {
+			tot_prd = 0;
+		}
+		tot_qte.innerHTML = tot_prd;
+
+		var net = parseFloat(prx_net.innerHTML);
+		tot_prx.innerHTML = net * tot_prd;
+	});
+</script>
