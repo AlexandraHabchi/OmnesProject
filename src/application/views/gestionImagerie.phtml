@@ -1,20 +1,20 @@
 <?php //if(empty($this->user)) Url::redirect("/home"); ?>
 <div class="col-sm-3">
-	<form role="form" id="tva" name="tva" method="post">
-		<h1 class="text-center">Saisie des taux de TVA</h1>
+	<form role="form" id="imagerie" name="imagerie" method="post" action="" enctype="multipart/form-data">
+		<h1 class="text-center">Saisie des images</h1>
 		<div class="form-group">
-			<label for="code">Code</label>
-			<input type="text" class="form-control data" name="code" id="code" size="30" OnBlur="OnVide('code')">
+			<label for="cod_prd">Produit</label>
+			<select class="form-control data" name="cod_prd" id="cod_prd">
+			<?php foreach($this->produits as $elmt) : ?>
+				<option value="<?= $elmt['id']?>"><?= $elmt['lib_prd']?></option>
+			<?php endforeach; ?>
+			</select>
 		</div>
 		<div class="form-group">
-			<label for="lib">Libellé</label>
-			<input type="text" class="form-control data" name="lib" id="lib" size="30" OnBlur="OnVide('lib')">
+			<label for="lnk_prd">Nombre de produits par colis</label>
+			<input type="text" class="hidden data" name='link'>
+			<input type="file" class="form-control" name="lnk_prd" id="lnk_prd" size="30" OnBlur="OnFile('lnk_prd')">
 		</div>
-		<div class="form-group">
-			<label for="taux">Taux</label>
-			<input type="text" class="form-control data" name="taux" id="taux" onBlur="OnVide('taux')">
-		</div>
-		<input type="text" class="hidden data">
 		
 		<input name="create" id="create" type="submit" value="Valider" class="btn btn-default btn-sm"/>
 		<input name="supp" id="supp" type="submit" value="Supprimer" class="btn btn-default btn-sm pull-right"/>

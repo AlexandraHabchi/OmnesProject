@@ -57,7 +57,7 @@ class GestionFabricantController extends Controller
         	
         	/* Suppression */
         	if(isset($data['supp']) && !empty($data['ident'])) {
-        		$reponse = $model->delete($data['ident']);
+        		$result = $model->delete($data['ident']);
         	}
         	
         	if(isset($result)) {

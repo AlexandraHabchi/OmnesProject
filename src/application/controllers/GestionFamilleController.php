@@ -24,7 +24,6 @@ class GestionFamilleController extends Controller
         	} 
         	
         	elseif(isset($params['context'])) {
-        		$model = new FamilleModel;
         		$list = $model->fetchAll();
         		array_unshift($list, $entete);
         		echo json_encode($list); exit;
@@ -58,7 +57,7 @@ class GestionFamilleController extends Controller
         	
         	/* Suppression */
         	if(isset($data['supp']) && !empty($data['ident'])) {
-        		$reponse = $model->delete($data['ident']);
+        		$result = $model->delete($data['ident']);
         	}
         	
         	if(isset($result)) {

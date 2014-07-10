@@ -1,33 +1,29 @@
 <?php
 
 /**
- * Controller Gestion TVA
+ * Controller Gestion Famille
  * @author Alexandra
  *
  */
-class GestionProduitController extends Controller
+class GestionImagerieController extends Controller
 {
     public function action()
     {
     	$this->view->user = $this->request->getSession()->getNamespace('user');
+        
         $errors = new ErrorModel();
-        $tva = new TvaModel();
-        $famille = new FamilleModel();
-        $fabricant = new FabricantModel();
         
-        $this->view->familles = $famille->fetchAll();
-        $this->view->codestva = $tva->fetchAll();
-        $this->view->fabricants = $fabricant->fetchAll();
-        
-        
+        $produit = new ProduitModel();
+        $this->view->produits = $produit->fetchAll();
+         
         if($this->request->getMethod() == 'GET'){
         	$params = $this->request->getParams();
-        	$model = new ProduitModel();
+        	$model = new ImagerieModel;
         	$entete = $model->getCols();
         	
         	if(isset($params['context']) && isset($params['click'])) {
-        		$elmt = $model->find($params['click']);
-        		echo json_encode($elmt); exit;
+        		//$elmt = $model->find($params['click']);
+        		//echo json_encode($elmt); exit;
         	} 
         	
         	elseif(isset($params['context'])) {
@@ -44,21 +40,16 @@ class GestionProduitController extends Controller
         	$errMessages = array();
         	$validMessages = array();
         	$errors = new ErrorModel();
-        	$model = new ProduitModel();
+        	$model = new ImagerieModel();
         	 
         	/* Création */
-        	if(isset($data['create']) && empty($data['ident'])) {	
-		    	$result = $model->create($data);
-        	}
-        	
-        	/* Modification */
-        	if(isset($data['create']) && !empty($data['ident'])) {
-        		$result = $model->update($data);
+        	if(isset($data['create']) && empty($data['ident'])) {
+		    	$result = $model->create($data['cod_prd'], $_FILES['lnk_prd']);
         	}
         	
         	/* Suppression */
         	if(isset($data['supp']) && !empty($data['ident'])) {
-        		$result = $model->delete($data['ident']);
+        		//$result = $model->delete($data['ident']);
         	}
         	
         	if(isset($result)) {
@@ -66,7 +57,7 @@ class GestionProduitController extends Controller
 	        		$errMessages[] = $errors->find('ERR-005');
 	        	} else {
 	        		$validMessages[] = $errors->find('MSG-002');
-	        		Url::redirect("/gestionProduit");
+	        		Url::redirect("/gestionImagerie");
 	        	}
         	}
         	

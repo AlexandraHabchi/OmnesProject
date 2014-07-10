@@ -9,35 +9,31 @@ var necessaire = 0;                     // Variable marquant l'erreur (0 : tout 
 var NbLock=0; var MaxLock=1;            // Varible pour la repitition de Saisie
 var check = {};
 
-// =================================================================================================================
+//=================================================================================================================
 function OnAlerte(champ, mess)  // message d'alerte dans le Div "alerte"
 {
-  if(mess!='')
-  {
-      $("#alerte").html('');
-      $("#alerte").append(mess);
-      bloque(champ);
+  console.log(mess);
+  if(mess!='') {
+  	  NbLock = 0;
+      if($("#alerte").html() == '') { $("#alerte").append(mess); bloque(champ); }
+      $("#"+champ).addClass("errorForm"); // Changement Couleur du fond
   }
-  else
-  {
+  else {
       $("#alerte").html('');
-      $("#"+champ).removeClass("error");
-      check[champ]=1;
+      $("#"+champ).removeClass("errorForm");
+      check[champ] = 1;
   } 
 }
 
 // =================================================================================================================
 // Fonction de blocage de la saisie si elle n'est pas conforme
 function bloque(champ)      // Blocage Champ pour la saisie à nouveau
-{
-    $("#"+champ).addClass("error");         // Ajoute class="error"   
-    var ctrl = document.getElementById(champ);    
-    NbLock++;
-    if (NbLock >= MaxLock) { NbLock=0; return; } 
-    ctrl.focus();                                                                                 
-    ctrl.select();                          // On selectionne le contenu pour faciliter la reprise de la saisie
-    check[champ]=0;
+{ 
+    var ctrl = document.getElementById(champ);
+    ctrl.focus(); ctrl.select();   // On selectionne le contenu pour faciliter la reprise de la saisie
+    check[champ]=0;                                             
 }
+
 
 
 // =================================================================================================================
@@ -285,38 +281,91 @@ function OnPostal(champ)
    if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Code postal invalide'); }  
    if (Ok==0) { ctrl.value=val; OnAlerte(champ, '');} 
 }
-// =================================================================================================================
-// Fonction pour initialiser l'objet de vérification du formulaire
-// A placer dans la methode OnLoad du Body
-function ini_check()
+
+/*
+ * Fonction pour vérifier taille + types fichiers uploadés
+ */
+var allowedTypes = ['jpg','jpeg','png', 'gif'];
+function OnFile(champ, oblig, taille_max) 
 {
-	console.log('ini_check()');
-  var inputs = document.getElementsByTagName('input');
-  for(var i=0; i<inputs.length; i++)
-  {
-    if(inputs[i].type!='button') 
-    {
-      check[inputs[i].id]=0;
-      if(inputs[i].onblur!=null) MaxLock++;
-    }
+  var ctrl = document.getElementById(champ);       var Ok=0;
+
+  if( typeof(taille_max) == 'undefined' ){ taille_max = 5; }
+  if( typeof(oblig) == 'undefined' ){ oblig = false; }
+
+  var files = ctrl.files; // FileList object
+  var taille = 0;
+
+  for (var i = 0; i < files.length; i++) {
+    
+      imgType = files[i].name.split('.');
+      imgType = imgType[imgType.length - 1].toLowerCase(); // On utilise toLowerCase() pour éviter les extensions en majuscules
+      if(allowedTypes.indexOf(imgType) == -1) {
+          Ok=1; OnAlerte(champ, "Ce type de fichier n'est pas supporté !");
+      } else {
+    	  taille += files[i].size/1048576;
+      }
   }
+  if(oblig && ctrl.files.length == 0) {
+    Ok=1; OnAlerte(champ, "Information obligatoire");
+  }
+
+  if(taille>taille_max) {
+    Ok=1; OnAlerte(champ, "La taille du(des) fichier(s) chargé(s) est supérieure à 5 Mo");
+  }
+
+  if (Ok==0) { OnAlerte(champ, ''); return true; }
 }
 
-// =================================================================================================================
-// Fonction pour controler l'ensemble des champs du formulaire avant envoi vers php
-// A placer dans la methode OnClick du bouton de validation du formulaire
+//=================================================================================================================
+//Fonction pour initialiser l'objet de vérification du formulaire
+//A placer dans la methode OnLoad du Body
+function ini_check()
+{
+	console.log('ini check');
+	var inputs = document.getElementsByTagName('input');
+	for(var i=0; i<inputs.length; i++) {
+		if(inputs[i].type!='button') {
+		   check[inputs[i].id]=0;
+		}
+	}
+	
+	var areas = document.getElementsByTagName('textarea');
+	for(var i=0; i<areas.length; i++) {
+		check[areas[i].id]=0;
+	}
+}
+
+//=================================================================================================================
+//Fonction pour controler l'ensemble des champs du formulaire avant envoi vers php
+//A placer dans la methode OnClick du bouton de validation du formulaire
 function check_form()
 {
-  var OK = 1;
-  var inputs = document.getElementsByTagName('input');
-  for(var i=0; i<inputs.length; i++)
-  {
-    if(inputs[i].type!='button') if(inputs[i].onblur==null) check[inputs[i].id]=1;
-    if(check[inputs[i].id]==0) inputs[i].onblur();
-    if(inputs[i].type!='button') OK=OK&&check[inputs[i].id];
-  }
-  if(OK) { $('#alerte').html('envoi formulaire'); return true; }
+	console.log('check form');
+	$("#alerte").html(''); NbLock = 0;
+	var OK = 1;
+	var inputs = document.getElementsByTagName('input');
+	for(var i=0; i<inputs.length; i++)
+	{
+		if(inputs[i].type!='button') 
+		{
+		   if(inputs[i].onblur==null) check[inputs[i].id]=1;
+		   else inputs[i].onblur();
+		   OK=OK&&check[inputs[i].id];
+		   if(!OK) return;
+		}
+	}
+	
+	var areas = document.getElementsByTagName('textarea');
+	for(var i=0; i<areas.length; i++) {
+		if(areas[i].onblur==null) check[areas[i].id]=1;
+		else areas[i].onblur();
+		OK=OK&&check[areas[i].id];
+	}
+	
+	if(OK) { $('#envoiencours').html('Envoi du formulaire en cours...'); return true; }
 }
+
 
 // =================================================================================================================
 // ===========         Fonction pour un ecran d'information  Pop-Ups         =======================================

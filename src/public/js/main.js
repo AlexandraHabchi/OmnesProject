@@ -45,6 +45,7 @@ $("#changePwdBtn").click(function(e){
 
 if($("form").get(0)) {
 	ini_check();
+	$( "select" ).combobox();
 }
 
 $("#create").click(function(e){
@@ -78,6 +79,4 @@ function getId()
 {
 	return document.getElementsByTagName('form')[0].attributes['id'].nodeValue;
 }
-
-$( "select" ).combobox();
 

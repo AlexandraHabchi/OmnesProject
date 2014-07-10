@@ -40,32 +40,48 @@
   
 */
 
-// ###########################################################################################
-// Varibles et fonctions utilisables dans les programmes Externe
-var T_PAGINE= new Array;                  // Tableau d'attribut d'affichage ......
+
+/*-----------------------------------------------------------------------
+          Varibles et fonctions utilisables dans les programmes Externe
+------------------------------------------------------------------------- */
+var T_PAGINE= new Array;          // Tableau d'attribut d'affichage ......
 var HEADER_PAGINE='';             // Variable Contenant une description du tableau
 
 function CLIC_Data_Page(Cle) {
+	if(typeof Cle == 'array') {
+		console.log('tableau');
+		return;
+	}
 	var id = ucfirst(getId());
 	$.ajax({
 	  url      : "/gestion" + id + "?context=html&click="+Cle,
 	  type     : "GET",
 	  dataType : "json",
 	  success  : function(result) {
+		  var j = -1;
 		  $("#ident").val(result[0]);
 		  for (var i in result) {
 			  i = parseInt(i);
 			  if(!isNaN(i)) {
 				  $(".data")[i].value = result[i];
+				  
+				  if($(".data")[i].type == 'select-one') {
+					  j++;
+					  var opt = $(".data option[value='" + result[i] + "']")[0];
+					  $(opt).attr("selected", "selected");
+					  $(".ui-autocomplete-input")[j].value = $(opt)[0].text;
+					  //$("form select").combobox();
+				  }
 			  }
 		  }
+		  
 		  
 	  }// end success
 	});
 }
 
 function CLIC_Sort_Col(Col) {}
-// #############     Fin des variables et fonction Externe        ############################
+//------------------  Fin des variables et fonction Externe -------------------------
 
 
 var NUM_page=1;
@@ -79,9 +95,9 @@ var data=[];
 var dat_ini=[];
 
 
-
-// ###########################################################################################
-// ********************* Ajout au select une option avec sa valeur *****************
+/*-----------------------------------------------------------------------
+             Ajout au select une option avec sa valeur
+------------------------------------------------------------------------- */
 function Select_Option(val,opt)
 {
   var option = "<option value="+val+">"+opt+"</option>";
@@ -89,25 +105,31 @@ function Select_Option(val,opt)
 }
 
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Elimine les lignes qui ne correspond pas à la recherche
+/*-----------------------------------------------------------------------------------------
+             Elimine les lignes qui ne correspondent pas à la recherche
+----------------------------------------------------------------------------------------- */
+ 
 function filtre_data(T, O)  		// T=tableau de Data; O=Objet du Filtre
 {
 	if(O == undefined) return T;
-  var a, j;   var tab=[];
-  var reg=new RegExp(O,"i");      // Expression Reguliere ignore la difference entre miniscule, Majuscule  
-  tab[0]=T[0]; j=1;                 // Il s'agit de Sauvegarder la 1er Ligne ( Entete)     
-  for (var i=1; i<T.length; i++) 
-    { 
-      a=T[i].join("");              // On Concatene l'ensemble des elements de la ligne
-      if (a.match(reg)) 
-         { tab[j]=T[i]; j++;}       // On ajoute la ligne au cas ou l'objet est trouvé
-    }
-  return tab;                       // On renvoie le tableau de données du filtre
+	var a, j;   var tab=[];
+	
+	var reg=new RegExp(O,"i");       // Expression Reguliere ignore la difference entre miniscule, Majuscule  
+	tab[0]=T[0]; j=1;                // Il s'agit de Sauvegarder la 1er Ligne ( Entete)
+	
+	for (var i=1; i<T.length; i++) { 
+	      a=T[i].join("");           // On Concatene l'ensemble des elements de la ligne
+	      if (a.match(reg)) { 
+	    	  tab[j]=T[i]; j++;      // On ajoute la ligne au cas ou l'objet est trouvé
+	      }       
+	}
+	return tab;                      // On renvoie le tableau de données du filtre
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Permet de trier un tableau par Ordre Croissant par colonne  ... A Ameliorer pour les numerique et les dates ...
+/*-----------------------------------------------------------------------------------------
+           Permet de trier un tableau par Ordre Croissant par colonne
+               A Ameliorer pour les numerique et les dates
+----------------------------------------------------------------------------------------- */
 function sort_data_col(T, C)      // T=Tableau  C=Colonne
 {
   L0=T[0];  T.shift();            // sauvegarde + supression de la 1er Ligne 
@@ -126,10 +148,30 @@ function sort_data_col(T, C)      // T=Tableau  C=Colonne
   return(T);
 }
 
+/*-----------------------------------------------------------------------------------------
+             Définition des variables contenant les différents éléments HTML
+------------------------------------------------------------------------------------------- */
 
+var table = '<div class="row table-responsive"><table class="table table-bordered table-striped table-condensed" id="cor_tab"></table></div>';
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Fonction principal .............. 
+var section_haut = '<div class="row" id="section_haut"></div>';
+var section_pagine = '<div class="col-lg-12" id="section_pagine"></div>';
+var section_bas = '<div class="row" id="section_bas"></div>';
+
+var select_nbl = '<div class="col-lg-4 form-group form-inline align-left" id="select_nbl"></div>';
+var title = '<div class="col-lg-5" id="title"><h1 class="text-center no-margin">' + HEADER_PAGINE + '</h1></div>';
+var search = '<input type="text" id="search" class="form-control" placeholder="Rechercher" onkeyup="pagine_recherche()">';
+var search_barre = '<div class="col-lg-3 align-right" id="search_barre">' + search + '</div>';
+
+var nbl_label_before = '<label for="nbl" class="control-label inline">Affiche &nbsp;</label>';
+var nbl = '<select class="form-control inline" id="nbl" onChange="change_pagination()">';
+var nbl_label_after = '<label for="nbl" class="control-label inline">&nbsp; lignes / page</label>';
+
+/*-----------------------------------------------------------------------------------------
+ * ----------------------------------------------------------------------------------------
+                                     Fonction principale
+-------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------- */
 function pagine(Input)
 {
 	data = [];
@@ -140,96 +182,98 @@ function pagine(Input)
 		}
 		data.push(ligne);
 	}
+	dat_ini = data; 
+	var rech = $("#search").val();
+	data = filtre_data(dat_ini, rech);
 	
-  dat_ini=data; 
-  var rech = $("#search").val();
-  data=filtre_data(dat_ini, rech);
-  $("#section_pagine").remove();
-  $("#corps_pagine").append('<div class="col-lg-12" id="section_pagine"></div>');   		// Definition de la section de pagination
-  $("#section_pagine").append('<div class="row" id="section_haut"></div>');   // section contenant le Select des Page + Recherche
- 
-  $("#section_pagine").append('<div class="row table-responsive"><table class="table table-bordered table-striped table-condensed" id="cor_tab"></table></div>'); 		// Affichage du Tableau 
-  
-  $("#section_pagine").append('<div class="row" id="section_bas"></div>'); 			// section d'affichage des boutons de pagination
-  construct_header();   $("#search").val(rech);
-  entete_tableau(data[0]);  
-  data_page(NUM_page);
-  construct_footer(data);
+	$("#section_pagine").remove();
+	
+	$("#corps_pagine").append(section_pagine);   // Definition de la section de pagination
+	$("#section_pagine").append(section_haut);   // section contenant le Select des Page + Recherche
+	 
+	$("#section_pagine").append(table); 		   // Affichage du Tableau 
+	  
+	$("#section_pagine").append(section_bas);    // section d'affichage des boutons de pagination
+	construct_header();   $("#search").val(rech);
+	entete_tableau(data[0]);  
+	data_page(NUM_page);
+	construct_footer(data);
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+/*-----------------------------------------------------------------------------------------
+					Fonction de recherche à l'intérieur d'un tableau de données
+----------------------------------------------------------------------------------------- */
 function pagine_recherche()
 {
-  data=filtre_data(dat_ini, $("#search").val() );
-  data_page(NUM_page); 
-  construct_footer(data); 
+	data = filtre_data(dat_ini, $("#search").val() );
+	data_page(1); 
+	construct_footer(data); 
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// La foction de tri du tableau par colonne
+/*-----------------------------------------------------------------------------------------
+							Fonction de tri du tableau par colonnes
+----------------------------------------------------------------------------------------- */
 function CLIC_Sort_Col(Col)
 {
-  if (Clic_Sort_Col==False) return;
-  
-  data=sort_data_col(dat_ini, Col );
-  data_page(NUM_page); 
-  construct_footer(data); 
+	if (Clic_Sort_Col==False) return;
+	  
+	data=sort_data_col(dat_ini, Col );
+	data_page(NUM_page); 
+	construct_footer(data); 
 }
 
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Constreuction de la section "ENTETE"
+/*-----------------------------------------------------------------------------------------
+					Construction de l'entête du tableau
+----------------------------------------------------------------------------------------- */
 function construct_header()
 {
-  $("#section_haut").append('<div class="col-lg-4 form-group form-inline align-left" id="select_nbl"></div>');
-  $("#section_haut").append('<div class="col-lg-5" id="title"></div>');
-  $("#section_haut").append('<div class="col-lg-3 align-right" id="search_barre"></div>');
-
-  $("#select_nbl").append('<label for="nbl" class="control-label inline">Affiche &nbsp;</label>');
-  $("#select_nbl").append('<select class="form-control inline" id="nbl" onChange="change_pagination()">');
-  $("#select_nbl").append('<label for="nbl" class="control-label inline">&nbsp; lignes / page</label>');
-
-  for (i=0; i<PAGE_TAB_SEL.length; i++)    // Remplissage du Select
-     $("#nbl").append(Select_Option(PAGE_TAB_SEL[i], PAGE_TAB_SEL[i]));
-  $("#nbl").val(NBL_page); 
-  
-  $("#title").append('<h1 class="text-center no-margin">'+HEADER_PAGINE+'</h1> ');
-    
-  $("#search_barre").append('<input type="text" id="search" class="form-control" placeholder="Rechercher" onkeyup="pagine_recherche()">');
+	$("#section_haut").append(select_nbl + title + search_barre);
+	
+	$("#select_nbl").append(nbl_label_before + nbl + nbl_label_after);
+	
+	for (i=0; i<PAGE_TAB_SEL.length; i++) {    // Remplissage du Select
+	     $("#nbl").append(Select_Option(PAGE_TAB_SEL[i], PAGE_TAB_SEL[i]));
+	}
+	$("#nbl").val(NBL_page);
 }
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-// --------------------------------------------------------------------------------------
-// Changement de Pagination ....... Repond au onchange du Select Nombre de Page 
+/*-----------------------------------------------------------------------------------------
+							Changement de Pagination
+					Repond au onchange du Select Nombre de Page 
+----------------------------------------------------------------------------------------- */
 function change_pagination()
 {
-  NBL_page=$("#nbl").val(); 
-  $("#btn_bas").remove();
-  construct_footer();  NUM_page=1; data_page(1);
+	NBL_page=$("#nbl").val(); 
+	$("#btn_bas").remove();
+	construct_footer();  NUM_page=1; data_page(1);
 }
 
-// ---------------------------------------------------------------------------------------
-// Construction du bas de pages avec les boutons de paginations
+/*-----------------------------------------------------------------------------------------
+             Construction du bas de pages avec les boutons de paginations
+----------------------------------------------------------------------------------------- */
 function construct_footer()
 {
- MAX_page=parseInt((data.length-1)/NBL_page);       // On calcul le Nombre Maximum de Page
- X=MAX_page*NBL_page;                               //
- if (X<data.length-1) MAX_page++;                   // On ajoute une page dans le cas du reste
- 
-  $("#pagine").remove();
-  if (MAX_page<=1) return;                          // dans le cas d'une seul page On Affiche pas le 
-													// les boutons 
+	MAX_page = parseInt((data.length-1)/NBL_page);     // On calcul le Nombre Maximum de Page
+	X=MAX_page*NBL_page;                               //
+	if (X<data.length-1) MAX_page++;                   // On ajoute une page dans le cas du reste
+	 
+	$("#pagine").remove();
+	if (MAX_page<=1) return;                           // dans le cas d'une seul page on n'affiche pas les btns
+	  
 
- $("#section_bas").append('<ul id="pagine" class="pagination pagination-sm no-margin"></ul>');  
- $("#pagine").append('<li id="lignes" class="disabled"><span>'+(data.length-1)+' lignes</span></li>');   
- $("#pagine").append('<li><input type="button" value="&laquo;&laquo;" OnClick="data_page(1)"/></li>');
- $("#pagine").append('<li><input type="button" value="&laquo;" OnClick="Page_Prec()"/><li>');
-
- for(var i=1; i<=MAX_page; i++)
-    $("#pagine").append('<li><input type="button" value="'+i+'" OnClick="data_page('+i+')"/></li>');
- 
- $("#pagine").append('<li><input type="button" value="&raquo;" OnClick="Page_Suiv()"/></li>');
- $("#pagine").append('<li><input type="button" value="&raquo;&raquo;"  OnClick="data_page('+MAX_page+')"/></li>');
+	var pagin_prem = '<li><input type="button" value="&laquo;&laquo;" OnClick="data_page(1)"/></li>';
+	var pagine_prec = '<li><input type="button" value="&laquo;" OnClick="Page_Prec()"/><li>';
+	var pagine_suiv = '<li><input type="button" value="&raquo;" OnClick="Page_Suiv()"/></li>';
+	var pagine_der = '<li><input type="button" value="&raquo;&raquo;"  OnClick="data_page(' + MAX_page + ')"/></li>';
+	
+	$("#section_bas").append('<ul id="pagine" class="pagination pagination-sm no-margin"></ul>');  
+	$("#pagine").append('<li id="lignes" class="disabled"><span>'+(data.length-1)+' lignes</span></li>');   
+	$("#pagine").append(pagin_prem + pagine_prec);
+	
+	for(var i=1; i<=MAX_page; i++) {
+	    $("#pagine").append('<li><input type="button" value="'+i+'" OnClick="data_page('+i+')"/></li>');
+	}
+	 
+	$("#pagine").append(pagine_suiv + pagine_der);
 }
 
 // ---------------------------------------------------------------------------------------
@@ -237,27 +281,30 @@ function Page_Suiv() {  if (NUM_page < MAX_page) NUM_page++;  data_page(NUM_page
 function Page_Prec() {  if (NUM_page > 1) NUM_page--; data_page(NUM_page); }
 
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Construction de l'entete du Tableau avec la ligne data[0]
+/*-----------------------------------------------------------------------------------------
+ 				Construction de l'entete du Tableau avec la ligne data[0]
+----------------------------------------------------------------------------------------- */
+// 
 function entete_tableau(lin)
 {
-  $("#cor_tab").append('<thead><tr id="top"></tr></thead>');
- 
- for (var i = 0; i<lin.length; i++)  
-   {
-    if (typeof(T_PAGINE[i])=='undefined') 
-        $("#top").append('<th OnClick="CLIC_Sort_Col('+i+')">'+lin[i]+'</th>');
-    else
-     {
-       if (T_PAGINE[i][0]==0);  
-       if (T_PAGINE[i][0]==1) $("#top").append('<th OnClick="CLIC_Sort_Col('+i+')">'+lin[i]+'</th>');
-     }
-    }
+	$("#cor_tab").append('<thead><tr id="top"></tr></thead>');
+	 
+	for (var i = 0; i<lin.length; i++)  
+	{
+		if (typeof(T_PAGINE[i])=='undefined') {
+			$("#top").append('<th OnClick="CLIC_Sort_Col('+i+')">'+lin[i]+'</th>');
+		} else {
+			if (T_PAGINE[i][0]==0);  
+			if (T_PAGINE[i][0]==1) $("#top").append('<th OnClick="CLIC_Sort_Col('+i+')">'+lin[i]+'</th>');
+		}
+	}
 }
 
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Affichage des lignes entre entete et le bas de page
+/*-----------------------------------------------------------------------------------------
+ 					Affichage des lignes entre entete et le bas de page
+----------------------------------------------------------------------------------------- */
+// 
 function data_page(N)   // N=Numero de la Page.
 {
   NUM_page=N;  
@@ -273,6 +320,3 @@ function data_page(N)   // N=Numero de la Page.
     }  // for j=
   } //for i=
 } // function
-
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
