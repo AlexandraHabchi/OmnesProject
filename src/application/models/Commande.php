@@ -109,15 +109,15 @@ class CommandeModel extends Model
     	return TRUE;
 	}
 	
-	public function nextStep($id)
+	public function nextStep($id_cmd)
 	{
-		$currentCommande = $this->find($id);
-		var_dump($currentCommande); exit;
-		$query = "UPDATE $this->table SET lib=:lib WHERE code=:code";
+		$currentCommande = $this->find($id_cmd);
+		$statut = $currentCommande['statut'] + 1;
+		$query = "UPDATE $this->table SET statut=:statut WHERE id_cmd=:id_cmd";
 	
 		$statement = $this->getDb()->prepare($query);
-		$statement->bindParam(':code', $code);
-		$statement->bindParam(':lib', $lib);
+		$statement->bindParam(':id_cmd', $id_cmd);
+		$statement->bindParam(':statut', $statut);
 		 
 		if($statement->execute() == false) {
 			$errorInfo = $statement->errorInfo();

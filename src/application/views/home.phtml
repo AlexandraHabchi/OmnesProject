@@ -1,3 +1,4 @@
+<?php $this->setTitle('Accueil'); ?>
 <?php if (FALSE == $this->user) : ?>
 <div class="col-sm-4 col-sm-offset-4" id="connexion">
     <h1 class="text-center">Login</h1>
@@ -23,6 +24,7 @@
 	    <br>
 </div>	    
 <?php else : ?>
+<div class="col-sm-12">
 	<p class="hidden" id="id_client"><?= $this->user['id'] ?></p>
     <h1>Bienvenue <?= $this->user['pseudo'] ?></h1>
     <?php if($this->user['profil'] != 'Admin') : ?>
@@ -48,8 +50,8 @@
     			<td><?= $produit['lib']; ?></td>
     			<td><?= $produit['nom_lab']; ?></td>
     			<td><?= $produit['prx_cat']; ?></td>
-    			<td id="prx"><?= $produit['prx_net']; ?></td>
-    			<td id="colis"><?= $produit['nbp_col']; ?></td>
+    			<td id="prx_net"><?= $produit['prx_net']; ?></td>
+    			<td id="nbp_col"><?= $produit['nbp_col']; ?></td>
     			<td id="input"><input type="text" class="form-control qte" id="qte<?= $produit['id']; ?>" name="qte" /></td>
     			<td id="tot_prd"></td>
     			<td id="tot_prx"></td>
@@ -60,44 +62,26 @@
     </table>
     <div class="text-alert text-center" id="alerte"></div>
 	<?php endif; ?>
+</div>
 <?php endif; ?>
 
 <script type="text/javascript">
-	$(".qte").keyup(function(e) {
-		var elmt = $(e.target.parentNode).context;
-		var tot_qte = elmt.nextElementSibling;
-		var colis = elmt.previousElementSibling;
-		var tot_prx = tot_qte.nextElementSibling;
-		var prx_net = colis.previousElementSibling;
+$(".qte").keyup(function(e) {
+	var elmt = $(e.target.parentNode.parentNode).context;
+	var quantite = elmt.children['input'].firstChild.value;
+	var prx_net = elmt.children['prx_net'];
+	var nbp_col = elmt.children['nbp_col'];
+	var tot_prx = elmt.children['tot_prx'];
+	var tot_prd = elmt.children['tot_prd'];
 
-		var tot_prd = parseInt(colis.innerHTML) * parseInt($(e.target).val());
-		if(isNaN(tot_prd)) {
-			tot_prd = 0;
-		}
-		tot_qte.innerHTML = tot_prd;
+	var tot_qte = parseInt(nbp_col.innerHTML) * parseInt(quantite);
+	if(isNaN(tot_qte)) {
+		tot_qte = 0;
+	}
+	tot_prd.innerHTML = tot_qte;
 
-		var net = parseFloat(prx_net.innerHTML);
-		tot_prx.innerHTML = net * tot_prd;
-	});
-
-	$("input.command").click(function(e) {
-		var elmt = $(e.target.parentNode.parentNode).context;
-		var id = elmt.children['id'].innerHTML;
-		var quantite = elmt.children['input'];
-		if(OnNumber(quantite.firstChild.id)) {
-			var produit = {
-					'id_prd' : elmt.children['id'].innerHTML,
-					'qte'    : elmt.children['input'].firstChild.value
-			};
-			$.ajax({
-			  url      : "/panier?context=html",
-			  type     : "POST",
-			  dataType : "json",
-			  data     : produit,
-			  success  : function(result) {
-				  alert(result['message']);
-			  }// end success
-			});
-		}
-	});
+	var net = parseFloat(prx_net.innerHTML);
+	tot_prx.innerHTML = net * tot_qte;
+});
 </script>
+

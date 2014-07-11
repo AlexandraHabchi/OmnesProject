@@ -11,10 +11,25 @@ class PanierController extends Controller
     {
         $this->view->user = $this->request->getSession()->getNamespace('user');
         
-        if($this->request->getMethod() == 'POST'){
+        if($this->request->getMethod() == 'GET'){
         	$data = $this->request->getParams();
         	
-        	/* Ajout produit */ 
+        	$commande = $this->getCommand($this->view->user['id']);
+        	$this->view->commande = $commande;
+        	$ligneModel = new LigneCommandeModel();
+        	$lignes = $ligneModel->findByCommande($commande['id_cmd']);
+        	
+        	foreach($lignes as $ligne) {
+        		$prdModel = new ProduitModel();
+        		$ligne['produit'] = $prdModel->find($ligne['cod_prd']);
+        		$this->view->lignes[] = $ligne;
+        	}
+        }
+        
+        if($this->request->getMethod() == 'POST') {
+        	$data = $this->request->getParams();
+        	
+        	/* Ajout/modif produit */ 
         	if(isset($data['context']) && isset($data['id_prd']) && isset($data['qte'])) {
         		$commande = $this->getCommand($this->view->user['id']);
         		$ligneModel = new LigneCommandeModel();
@@ -22,18 +37,38 @@ class PanierController extends Controller
         		
         		foreach($lignes as $ligne) {
         			if($ligne['cod_prd'] == $data['id_prd']) {
-        				$result = $ligneModel->updateQte($commande['id_cmd'], $data['id_prd'], $data['qte']);
+        				if($data['qte'] == 0) {
+        					$result = $ligneModel->delete($commande['id_cmd'], $data['id_prd']);
+        					$msg = 'Produit supprimé du panier';
+        				} else {
+        					$result = $ligneModel->updateQte($commande['id_cmd'], $data['id_prd'], $data['qte']);
+        					$msg = 'Quantité modifiée dans le panier';
+        				}
         			}
         		}
         		
         		if(!isset($result)) {
         			$result = $ligneModel->create($commande['id_cmd'], $data['id_prd'], $this->view->user['id'], $data['qte'], $commande['statut']);
+        			$msg = 'Produit ajouté au panier';
         		}
         		
         		if($result == true) {
-        			echo json_encode(array('message' => 'Produit ajouté au panier')); exit;
+        			echo json_encode(array('message' => $msg)); exit;
         		} else {
         			echo json_encode(array('message' => 'Problème d\'ajout au panier')); exit;
+        		}
+        	}
+        	
+        	/* Envoi commande */
+        	if(isset($data['context']) && isset($data['id_cmd'])) {
+        		$commande = new CommandeModel();
+        		$result = $commande->nextStep($data['id_cmd']);
+        		
+        	
+        		if($result == true) {
+        			echo json_encode(array('message' => 'Commande envoyée !')); exit;
+        		} else {
+        			echo json_encode(array('message' => 'Problème d\'envoi de la commande')); exit;
         		}
         	}
         }

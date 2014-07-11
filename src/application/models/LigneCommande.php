@@ -57,7 +57,7 @@ class LigneCommandeModel extends Model
 		}
 		return  $statement->fetchAll();
 	}
-	
+
 	public function findByProduitAndStatut($cod_prd, $statut)
 	{
 		$query = "SELECT * FROM $this->table WHERE cod_prd=:id AND statut=:statut";
@@ -111,5 +111,23 @@ class LigneCommandeModel extends Model
 			exit;
 		}
 	    return TRUE;
+	}
+	
+	public function delete($id_cmd, $cod_prd)
+	{
+		$query = "DELETE FROM $this->table
+				   WHERE id_cmd=:id_cmd
+				     AND cod_prd=:cod_prd";
+			
+		$statement = $this->getDb()->prepare($query);
+		$statement->bindParam(':id_cmd', $id_cmd);
+		$statement->bindParam(':cod_prd', $cod_prd);
+						
+		if($statement->execute() == false) {
+			$errorInfo = $statement->errorInfo();
+			echo $errorInfo[2];
+			exit;
+		}
+		return TRUE;
 	}
 }

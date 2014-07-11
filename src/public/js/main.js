@@ -68,6 +68,34 @@ if($("#corps_pagine").get(0)) {
 	});
 }
 
+$("input.command").click(function(e) {
+	var elmt = $(e.target.parentNode.parentNode).context;
+	var id = elmt.children['id'].innerHTML;
+	var quantite = elmt.children['input'];
+	if(OnNumber(quantite.firstChild.id)) {
+		var produit = {
+				'id_prd' : elmt.children['id'].innerHTML,
+				'qte'    : elmt.children['input'].firstChild.value
+		};
+		$.ajax({
+		  url      : "/panier?context=html",
+		  type     : "POST",
+		  dataType : "json",
+		  data     : produit,
+		  success  : function(result) {
+			  alert(result['message']);
+			  if(document.title == 'Panier') {
+				  location.reload();
+			  } else {
+				  quantite.firstChild.value = '';
+				  elmt.children['tot_prx'].innerHTML = '';
+				  elmt.children['tot_prd'].innerHTML = '';
+			  }
+		  }// end success
+		});
+	}
+});
+
 function ucfirst(string) 
 {
 	var min = string.charAt(0); maj = string.charAt(0).toUpperCase();

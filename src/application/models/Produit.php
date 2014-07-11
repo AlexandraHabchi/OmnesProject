@@ -36,7 +36,18 @@ class ProduitModel extends Model
 	
 	public function find($id)
 	{
-		$query = "SELECT * FROM $this->table WHERE id=:id";
+		$query = "SELECT produit.id, produit.lib_prd, 
+						 tauxtva.tau_tva, famille.lib, fabricant.nom_lab,
+						 produit.prx_cat, produit.prx_net, produit.nbp_col, 
+						 produit.dat_der_cmd, produit.dat_pro_cmd, produit.cdt_ccm
+				    FROM $this->table
+				    JOIN fabricant
+					  ON fabricant.cod_lab = produit.lab_cod
+		            JOIN tauxtva
+					  ON tauxtva.cod_tva = produit.tva_cod
+		            JOIN famille
+					  ON famille.code = produit.fam_cod
+				   WHERE id=:id";
 		 
 		$statement = $this->getDb()->prepare($query);
 		$statement->bindParam(':id', $id);
