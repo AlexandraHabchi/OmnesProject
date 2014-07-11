@@ -29,6 +29,8 @@ require_once MODEL_PATH . DS . 'Tva.php';
 require_once MODEL_PATH . DS . 'Fabricant.php';
 require_once MODEL_PATH . DS . 'Produit.php';
 require_once MODEL_PATH . DS . 'Imagerie.php';
+require_once MODEL_PATH . DS . 'Commande.php';
+require_once MODEL_PATH . DS . 'LigneCommande.php';
 require_once MODEL_PATH . DS . 'Error.php';
 
 $request = new Request;

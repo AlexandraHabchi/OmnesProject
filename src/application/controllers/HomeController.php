@@ -43,7 +43,6 @@ class HomeController extends Controller
         			$validMessages = $errors->find('MSG-001');
         			echo json_encode(array('success' => $validMessages)); exit;
         		}
-        		
         	}
         }
         

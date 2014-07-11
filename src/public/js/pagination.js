@@ -60,7 +60,6 @@ function CLIC_Data_Page(Cle) {
 			  i = parseInt(i);
 			  if(!isNaN(i)) {
 				  $(".data")[i].value = result[i];
-				  
 				  if($(".data")[i].type == 'select-one') {
 					  j++;
 					  var opt = $(".data option[value='" + result[i] + "']")[0];

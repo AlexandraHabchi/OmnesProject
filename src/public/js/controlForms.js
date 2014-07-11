@@ -79,7 +79,7 @@ function OnVide(champ)          // Champs Obligatoire ....Not Null
 
   if (len<1) Ok=1; 
   if (Ok==1 && NbLock < MaxLock) { OnAlerte(champ, 'Information obligatoire'); }
-  if (Ok==0) { OnAlerte(champ, ''); }
+  if (Ok==0) { OnAlerte(champ, ''); return true; }
 }
 
 // =================================================================================================================
@@ -94,7 +94,7 @@ function OnLimite(champ,X,Y)    // Saisie limite    val € [X..Y]
 
   if (val<X || val>Y) Ok=1;
   if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Valeur limite entre '+X+' et '+Y);}  
-  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); } 
+  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 // =================================================================================================================
@@ -107,7 +107,7 @@ function OnAlpha(champ)          // Champ Alphabétique sans accents ni caractè
   RE = /^([A-Za-z]+[ ]*[-]*[A-Za-z]*)+$/;
   if (!RE.test(ctrl.value)) Ok=1; // Expression reguliere 
   if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Uniquement des caractères alphabétiques sans accents');}  
-  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); } 
+  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 // =================================================================================================================
@@ -120,7 +120,7 @@ function OnAlphaNum(champ)          // Champ Alphabétique avec accents et numé
   RE = /^[A-Za-zàâäéèêëîïôùûç\s,'0-9\-]+$/;;
   if (!RE.test(ctrl.value)) Ok=1; // Expression reguliere 
   if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Uniquement des caractères alphanumériques sans symboles');}  
-  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); } 
+  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 // =================================================================================================================
@@ -133,7 +133,7 @@ function OnPhone(champ)
   RE = /^(0[1-68])(?:[ _.-]?(\d{2})){4}$/;
   if (!RE.test(ctrl.value)) Ok=1; // Expression reguliere 
   if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Format téléphonique invalide');}  
-  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); } 
+  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 // =================================================================================================================
@@ -152,7 +152,7 @@ function OnNumber(champ)
    RE = /^[0-9]+$/;
    if (!RE.test(ctrl.value)) Ok=1; // Expression reguliere 
    if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Format numérique entier invalide'); }  
-   if (Ok==0) { ctrl.value=val; OnAlerte(champ, '');} 
+   if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 // =================================================================================================================
@@ -165,7 +165,7 @@ function OnFloat(champ)
    RE = /^[0-9\.\,]+$/;   if (!RE.test(ctrl.value)) Ok=1;  
    val=val.replace(',','.');    Ok=(isNaN(val)?1:0); 
    if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Format numérique décimal invalide'); }  
-   if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); } 
+   if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 // =================================================================================================================
@@ -178,7 +178,7 @@ function OnUrl(champ)
   RE = /^[A-Za-z,'0-9\-\_\/\:\.\?\=\&]+$/;;
   if (!RE.test(ctrl.value)) Ok=1; // Expression reguliere 
   if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Lien ou URL invalide'); }  
-  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); } 
+  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 // =================================================================================================================
@@ -191,7 +191,7 @@ function OnMail(champ)
   RE = /^[A-Za-z0-9\.\-_]+[@][A-Za-z0-9\-\.]+[\.][A-Za-z][A-Za-z][A-Za-z]?$/;
   if (!RE.test(ctrl.value)) Ok=1; // Expression reguliere 
   if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Adresse mail invalide'); }  
-  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); } 
+  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 // =================================================================================================================
@@ -204,7 +204,7 @@ function OnRadio(champ)          // Fonction pour le test des boutons radio
    for ( i = 0; i < ctrl.length; i++ )     // Si on trouve un bouton coche, on le marque
       if (ctrl[i].status)  Ok=0; 
    if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Eléments à cocher'); }  
-   if (Ok==0) { OnAlerte(champ, ''); } 
+   if (Ok==0) { OnAlerte(champ, ''); return true; } 
 }
 // =================================================================================================================
 
@@ -220,7 +220,7 @@ function OnLenMin(champ,X)
   
   if (len<X) Ok=1; // Expression reguliere 
   if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Nombre de caractere Insufissant >='+X); }  
-  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); } 
+  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 // =================================================================================================================
@@ -233,7 +233,7 @@ function OnLenMax(champ,X)
   
   if (len>X) Ok=1; // Expression reguliere 
   if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Nombre de caractere très important <='+X); }  
-  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); } 
+  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 // =================================================================================================================
@@ -246,7 +246,7 @@ function OnLenLim(champ,X,Y)
   
   if (len<X || len>Y) Ok=1;
   if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Nombre de caractere Limite entre '+X+' et '+Y);}  
-  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); } 
+  if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 // =================================================================================================================
@@ -264,7 +264,7 @@ function CheckPwd(champ1,champ2)
             deuze.value = "";// Reinitialisation des deux champs     prems.value = "";    
             OnAlerte(champ1,'La confirmation de votre mot de passe n\'est pas exacte.');  // Envoi d'une alerte
         }
-      else OnAlerte(champ2, '');
+      else { OnAlerte(champ2, ''); return true; }
 }
 
 // =================================================================================================================
@@ -278,7 +278,7 @@ function OnPostal(champ)
    RE = /^\d{5}$/;
    if (!RE.test(ctrl.value)) Ok=1; // Expression reguliere 
    if (Ok==1 && NbLock<MaxLock) {  OnAlerte(champ, 'Code postal invalide'); }  
-   if (Ok==0) { ctrl.value=val; OnAlerte(champ, '');} 
+   if (Ok==0) { ctrl.value=val; OnAlerte(champ, ''); return true; } 
 }
 
 /*
