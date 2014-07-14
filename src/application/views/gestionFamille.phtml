@@ -22,7 +22,24 @@
 	<div class="text-alert text-center" id="alerte"></div>
 	<div class="text-center" id="envoiencours"></div>
 </div>
-<div class="col-sm-9" id="corps_pagine">
-    
+<div class="col-sm-9">
+    <table class="table table-bordered table-striped table-condensed test">
+    	<thead>
+    		<?php foreach($this->entete as $title) : ?>
+    		<th><?= $title ?></th>
+    		<?php endforeach; ?>
+    	</thead>
+    	<tbody>
+		<?php foreach($this->list as $ligne) : ?>
+			<tr>
+			<?php foreach($ligne as $key => $cel) : ?>
+				<?php if(gettype($key) == 'string') : ?>
+					<td><?= $cel ?></td>
+				<?php endif; ?>
+			<?php endforeach; ?>
+			</tr>
+		<?php endforeach; ?>
+    	</tbody>
+    </table>
 </div>
 

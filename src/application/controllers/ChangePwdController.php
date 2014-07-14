@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Controller Accueil
- * @author Formateur
+ * Controller Changement de mot de passe
+ * @author Alexandra Habchi
  *
  */
 class ChangePwdController extends Controller

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Controller Gestion Famille
- * @author Alexandra
+ * Controller Gestion Imagerie
+ * @author Alexandra Habchi
  *
  */
 class GestionImagerieController extends Controller

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Controller Gestion TVA
- * @author Alexandra
+ * Controller Gestion Produit
+ * @author Alexandra Habchi
  *
  */
 class GestionProduitController extends Controller

@@ -42,6 +42,7 @@ INSERT INTO `message` (`id`, `lib`) VALUES
 ('ERR-003', 'Compte bloqué, contactez votre administrateur'),
 ('ERR-004', 'Erreur d''envoi du message'),
 ('ERR-005', 'Problème d''enregistrement des données'),
+('ERR-006', 'Cet identifiant n''existe pas dans la table concernée'),
 ('MSG-001', 'Mot de passe envoyé à votre adresse mail'),
 ('MSG-002', 'Le compte a bien été créé');
 

@@ -2,7 +2,7 @@
 
 /**
  * Controller Gestion Famille
- * @author Alexandra
+ * @author Alexandra Habchi
  *
  */
 class GestionFamilleController extends Controller
@@ -16,18 +16,19 @@ class GestionFamilleController extends Controller
         if($this->request->getMethod() == 'GET'){
         	$params = $this->request->getParams();
         	$model = new FamilleModel;
-        	$entete = $model->getCols();
+        	$this->view->entete = $model->getCols();
+            $this->view->list = $model->fetchAll();
         	
         	if(isset($params['context']) && isset($params['click'])) {
         		$elmt = $model->find($params['click']);
         		echo json_encode($elmt); exit;
         	} 
         	
-        	elseif(isset($params['context'])) {
+        	/*elseif(isset($params['context'])) {
         		$list = $model->fetchAll();
         		array_unshift($list, $entete);
         		echo json_encode($list); exit;
-        	}
+        	}*/
         	
         }
         

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Controller Accueil
- * @author Formateur
+ * Controller Modifier Profil Client
+ * @author Alexandra Habchi
  *
  */
 class ModifierClientController extends Controller

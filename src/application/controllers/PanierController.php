@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Controller Accueil
- * @author Formateur
+ * Controller Panier
+ * @author Alexandra Habchi
  *
  */
 class PanierController extends Controller
@@ -24,6 +24,12 @@ class PanierController extends Controller
         		$ligne['produit'] = $prdModel->find($ligne['cod_prd']);
         		$this->view->lignes[] = $ligne;
         	}
+            $archives = new CommandeModel;
+            foreach($archives->findByClient($this->view->user['id']) as $cmd) {
+                if($cmd['statut'] != 0) {
+                    $this->view->archives[] = $cmd;
+                }
+            }
         }
         
         if($this->request->getMethod() == 'POST') {

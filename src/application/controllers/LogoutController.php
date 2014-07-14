@@ -2,7 +2,7 @@
 
 /**
  * Controller de déconnexion
- * @author Formateur
+ * @author Alexandra Habchi
  *
  */
 class LogoutController extends Controller

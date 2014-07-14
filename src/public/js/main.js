@@ -1,6 +1,7 @@
 /*
  * Main Javascript
  */
+$("table.test").dataTable();
 
 $("#connexion a").click(function(e){
 	e.preventDefault();

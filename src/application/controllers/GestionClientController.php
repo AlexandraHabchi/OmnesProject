@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Controller Inscription
- * @author Formateur
+ * Controller gestion Client
+ * @author Alexandra Habchi
  *
  */
 class GestionClientController extends Controller

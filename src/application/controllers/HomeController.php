@@ -2,7 +2,7 @@
 
 /**
  * Controller Accueil
- * @author Formateur
+ * @author Alexandra Habchi
  *
  */
 class HomeController extends Controller
