@@ -73,6 +73,21 @@ class LigneCommandeModel extends Model
 		}
 		return  $statement->fetchAll();
 	}
+
+	public function findByStatut($statut)
+	{
+		$query = "SELECT * FROM $this->table WHERE statut=:statut ORDER BY 2";
+			
+		$statement = $this->getDb()->prepare($query);
+		$statement->bindParam(':statut', $statut);
+			
+		if($statement->execute() == false) {
+			$errorInfo = $statement->errorInfo();
+			echo $errorInfo[2];
+			exit;
+		}
+		return  $statement->fetchAll();
+	}
 	
 	public function create($id_cmd, $cod_prd, $id_cli, $quantite, $statut)
 	{

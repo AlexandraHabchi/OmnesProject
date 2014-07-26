@@ -118,8 +118,13 @@ class CommandeModel extends Model
 		$statement = $this->getDb()->prepare($query);
 		$statement->bindParam(':id_cmd', $id_cmd);
 		$statement->bindParam(':statut', $statut);
+
+		$query_2 = "UPDATE ligneCommande SET statut=:statut WHERE id_cmd=:id_cmd";
+		$statement_2 = $this->getDb()->prepare($query_2);
+		$statement_2->bindParam(':id_cmd', $id_cmd);
+		$statement_2->bindParam(':statut', $statut);
 		 
-		if($statement->execute() == false) {
+		if($statement->execute() == false || $statement_2->execute() == false) {
 			$errorInfo = $statement->errorInfo();
 			echo $errorInfo[2];
 			exit;
